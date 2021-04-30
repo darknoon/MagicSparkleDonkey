@@ -25,13 +25,7 @@ class SparseSetTests_macOS: XCTestCase {
     }
     
     func testAddRemove() {
-        var set = SparseIntSet()
-        
-        set.insert(0)
-        set.insert(1)
-        set.insert(2)
-        set.insert(3)
-        set.insert(4)
+        var set: SparseIntSet = [0, 1, 3, 4]
         
         set.remove(2)
         
@@ -41,16 +35,16 @@ class SparseSetTests_macOS: XCTestCase {
     func testAddSecondPage() {
         var set = SparseIntSet()
         
-        XCTAssertEqual(set.usedPageCount, 0)
+        XCTAssertEqual(set.activePageCount, 0)
         
         
         // Force-allocate a later page
-        let elementsPerPage = type(of: set).elementsPerPage
+        let elementsPerPage = type(of: set).SparseArray.elementsPerPage
         for i in 0..<elementsPerPage {
             set.insert(4 * elementsPerPage + i)
         }
         
-        XCTAssertEqual(set.usedPageCount, 1)
+        XCTAssertEqual(set.activePageCount, 1)
     }
     
     func testAddRandom() {
@@ -60,14 +54,35 @@ class SparseSetTests_macOS: XCTestCase {
             set.insert(i)
         }
         
-        let elementsPerPage = type(of: set).elementsPerPage
-        XCTAssertEqual(set.usedPageCount, (10_000 + elementsPerPage - 1) / elementsPerPage)
+        let elementsPerPage = type(of: set).SparseArray.elementsPerPage
+        XCTAssertEqual(set.activePageCount, (10_000 + elementsPerPage - 1) / elementsPerPage)
 
         for i in 0..<5_000 {
             set.remove(i)
         }
-        XCTAssertEqual(set.usedPageCount, 11)
+        XCTAssertEqual(set.activePageCount, 11)
+    }
+    
+    func testRemoveItemNotInSet() {
+        
+    }
+    
+    func testMultiplesThrash() {
+        let max = 10_000
+        
+        var set = SparseIntSet()
 
+        // Add multiples of each integer in this range
+        for (addBy, remBy) in [(3, 5), (7, 9)] {
+            // Add
+            for j in stride(from: 0, to: max, by: addBy) {
+                set.insert(j)
+            }
+            
+            for j in stride(from: 0, to: max, by: remBy) {
+                set.remove(j)
+            }
+        }
     }
 
 }
