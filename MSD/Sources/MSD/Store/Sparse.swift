@@ -8,12 +8,12 @@
 import Foundation
 
 
-typealias SparseSet = SparseSetPaged
+typealias SparseIntSet = SparseArrayPaged<Void>
 
 
 // Based on sparse arrays in EnTT, and reference from fireblade-ecs swift
 // https://research.swtch.com/sparse
-struct SparseSetPaged<Element> where Element : BinaryInteger {
+@usableFromInline struct SparseArrayPaged<Element> {
     typealias Index = Array<Element>.Index
     
     struct Header {
@@ -21,6 +21,8 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
     }
     
     internal typealias Page = ManagedBuffer<Header, Index>
+    
+    typealias DenseElement = (index: Index, element: Element)
     
     static var pageSize: Index { 4096 }
     // Pages that we have space for
@@ -32,7 +34,7 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
     
     var count: Int { dense.count }
     var sparse: [Page?] = []
-    var dense: [Element] = []
+    var dense: [DenseElement] = []
     
     
     static func makePage() -> Page {
@@ -43,8 +45,8 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
         sparse = []
     }
     
-    func page(_ e: Element) -> (page: Index, offset: Index) {
-        (page: Index(e) / Self.elementsPerPage, offset: Index(e) % Self.elementsPerPage)
+    func page(for index: Index) -> (page: Index, offset: Index) {
+        (page: index / Self.elementsPerPage, offset: index % Self.elementsPerPage)
     }
     
     mutating func assure(page: Index) -> Page {
@@ -66,10 +68,10 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
         return realPage
     }
     
-    mutating func insert(_ e: Element) {
-        let (page, offset) = page(e)
+    mutating func set(_ e: Element, at index: Index) {
+        let (page, offset) = page(for: index)
         let idx = count
-        dense.append(e)
+        dense.append((index, e))
         assure(page: page).withUnsafeMutablePointers{
             $0.pointee.used += 1
             // Make sparse[e] point to the index in dense of e
@@ -77,8 +79,8 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
         }
     }
     
-    func has(_ e: Element) -> Bool {
-        let (page, offset) = page(e)
+    func has(_ index: Index) -> Bool {
+        let (page, offset) = page(for: index)
         guard page < pageCount, let sparsePage = sparse[page] else {
             return false
         }
@@ -88,15 +90,15 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
         
         return sparsePage.withUnsafeMutablePointerToElements{
             let idx = ($0 + offset).pointee
-            return idx < count && dense[idx] == e
+            return idx < count && dense[idx].index == index
         }
     }
     
-    mutating func remove(_ e: Element) {
-        let (page, offset) = page(e)
+    mutating func remove(at idx: Index) {
+        let (page, offset) = page(for: idx)
         
         guard page < pageCount, let sparsePage = sparse[page] else {
-            print("Removed an element that didn't even have a page allocated: \(e)")
+            print("Removed an element that didn't even have a page allocated: \(idx)")
             return
         }
         sparsePage.header.used -= 1
@@ -116,13 +118,32 @@ struct SparseSetPaged<Element> where Element : BinaryInteger {
         dense.removeLast()
     }
     
-    @inlinable
-    func forEach(_ body: (Element) -> Void) {
+    func forEach(_ body: (DenseElement) -> Void) {
         dense.forEach(body)
     }
     
-    func map<T>(_ body: (Element) -> T) -> [T] {
+    func map<T>(_ body: (DenseElement) -> T) -> [T] {
         dense.map(body)
     }
     
+}
+
+extension SparseArrayPaged where Element == Void {
+    
+    mutating func insert(_ e: Index) {
+        set(Void(), at: e)
+    }
+    
+    mutating func remove(_ idx: Index) {
+        remove(at: idx)
+    }
+
+    func forEach(_ body: (Index) -> Void) {
+        dense.forEach{body($0.index)}
+    }
+    
+    func map<T>(_ body: (Index) -> T) -> [T] {
+        dense.map{body($0.index)}
+    }
+
 }

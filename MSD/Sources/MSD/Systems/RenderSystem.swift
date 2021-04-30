@@ -19,7 +19,7 @@ class RenderSystem : System {
         scene.store.forEach{(id, transform: inout TransformComponent, mesh: inout MeshComponent) in
             let t = transform.transform
             if let m = mesh.resource {
-                print("Render this mesh")
+                print("Render this mesh with transform \(t)")
             }
             
             // TODO: Render model at the given transform?

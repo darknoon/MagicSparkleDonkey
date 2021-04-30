@@ -14,7 +14,7 @@ import simd
 class SparseSetTests_macOS: XCTestCase {
 
     func testBasicCreate() {
-        var set = SparseSet<Int>()
+        var set = SparseIntSet()
         
         set.insert(0)
         set.insert(1)
@@ -25,7 +25,7 @@ class SparseSetTests_macOS: XCTestCase {
     }
     
     func testAddRemove() {
-        var set = SparseSet<Int>()
+        var set = SparseIntSet()
         
         set.insert(0)
         set.insert(1)
@@ -39,7 +39,7 @@ class SparseSetTests_macOS: XCTestCase {
     }
     
     func testAddSecondPage() {
-        var set = SparseSet<Int>()
+        var set = SparseIntSet()
         
         XCTAssertEqual(set.usedPageCount, 0)
         
@@ -54,7 +54,7 @@ class SparseSetTests_macOS: XCTestCase {
     }
     
     func testAddRandom() {
-        var set = SparseSet<Int>()
+        var set = SparseIntSet()
 
         for i in (0..<10_000).reversed() {
             set.insert(i)
