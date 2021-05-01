@@ -8,7 +8,6 @@
 import simd
 
 public struct Camera : Component {
-    public init() {}
     var perspective: Transform = .identity
 }
 

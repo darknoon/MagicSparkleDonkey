@@ -21,7 +21,6 @@ class RenderSystem : System {
             if let m = mesh.resource {
                 print("Render this mesh with transform \(t)")
             }
-            
             // TODO: Render model at the given transform?
         }
     }

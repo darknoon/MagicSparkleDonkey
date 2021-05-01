@@ -42,7 +42,6 @@ class ComponentStoreTests_macOS: XCTestCase {
     func testIterateAllTransforms() {
         // Create 3 entities with transforms
         var store = ComponentStore()
-        store.registry.register(component: TransformComponent.self)
         
         let entKp = (0...4).map{ i -> (Entity.ID, Transform) in
             let id = store.createEntity()
@@ -58,6 +57,17 @@ class ComponentStoreTests_macOS: XCTestCase {
         }
         XCTAssertEqual(expected, actual)
         
+    }
+    
+    func testIterateAllEntities() {
+        var store = ComponentStore()
+        
+        let end  = 123
+        for _ in 0..<end {
+            let _ = store.createEntity()
+        }
+        
+        XCTAssertEqual(store.validIds, Set<Entity.ID>( Array(0..<Entity.ID(end)) ))
     }
     
 }

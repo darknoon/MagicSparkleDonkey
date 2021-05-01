@@ -3,7 +3,7 @@
 
     final class SceneTests: XCTestCase {
 
-        struct TestComponent : Component, Equatable {
+        struct TestComponent : Component {
             var hello: Int
         }
         
@@ -21,8 +21,6 @@
         }
         
         func testCustomComponent() {
-            scene.registerComponent(TestComponent.self)
-
             let e = scene.root
             
             scene.store.set(id: e, component: TestComponent(hello: 111))

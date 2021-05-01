@@ -24,7 +24,8 @@ typealias SparseIntSet = SparseArrayPaged<Void>
     // Pages actually in use
     var activePageCount: Int { sparse.activePageCount }
 
-    var count: Int { dense.count }
+    public var count: Int { dense.count }
+    
     var sparse = SparseArray()
     var dense: [DenseElement] = []
     
@@ -51,14 +52,14 @@ typealias SparseIntSet = SparseArrayPaged<Void>
     /// @return whether the item existed when removed
     @discardableResult
     mutating func remove(at index: Index) -> Bool {
-        guard let denseIdx = sparse.remove(at: index)
+        guard let denseIndex = sparse.remove(at: index)
         else {
             // Removed an index for which there wasn't a page. Throw?
             abort()
         }
         
-        guard (0..<dense.count).contains(denseIdx),
-              dense[denseIdx].index == index
+        guard (0..<dense.count).contains(denseIndex),
+              dense[denseIndex].index == index
         else {
             // Remove item not in the set
             return false
@@ -66,7 +67,7 @@ typealias SparseIntSet = SparseArrayPaged<Void>
         
         // Move the last element into this position
         let end = dense.count - 1
-        dense.swapAt(denseIdx, end)
+        dense.swapAt(denseIndex, end)
         // Now remove the element (should be == e)
         dense.removeLast()
         return true
@@ -79,6 +80,34 @@ typealias SparseIntSet = SparseArrayPaged<Void>
     func map<T>(_ body: (DenseElement) -> T) -> [T] {
         dense.map(body)
     }
+}
+
+extension SparseArrayPaged : RandomAccessCollection {
+    
+    public var startIndex: Array<Element>.Index {
+        dense.startIndex
+    }
+    
+    public var endIndex: Array<Element>.Index {
+        dense.endIndex
+    }
+
+    @usableFromInline
+    subscript(index: Index) -> Element? {
+        get {
+            guard let denseIndex = sparse[index]
+            else { return nil }
+            
+            guard (0..<dense.count).contains(denseIndex),
+                  dense[denseIndex].index == index
+            else { return nil }
+
+            return dense[denseIndex].element
+        }
+    
+
+    }
+
 }
 
 extension SparseArrayPaged {

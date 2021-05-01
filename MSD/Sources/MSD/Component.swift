@@ -14,3 +14,10 @@
 /// }
 /// ```
 public protocol Component {}
+
+extension Component {
+    // By default a component type uses its metatype as an identifier
+    public static var ID: ObjectIdentifier {
+        ObjectIdentifier(Self.Type.self)
+    }
+}

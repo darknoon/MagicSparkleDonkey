@@ -11,8 +11,6 @@ public struct ComponentStore {
     
     internal init() {}
 
-    public var registry = ComponentTypeRegistry()
-    
     public var validIds: Set<Entity.ID> = []
     public var nextId: Entity.ID = 0
 
@@ -27,10 +25,8 @@ public struct ComponentStore {
         validIds.remove(nextId)
     }
 
-    // Monotonically increasing ID for components
-    struct ComponentType: Identifiable, Hashable {
-        var id: UInt32
-    }
+    // identifier of the metatype for each component struct
+    typealias ComponentType = ObjectIdentifier
     
     // Entries store the actual
     mutating internal func findOrCreateStorageEntry<T: Component>(componentType: ComponentType) -> ComponentCollection<T> {
@@ -51,13 +47,13 @@ public struct ComponentStore {
     }
     
     mutating func set<T: Component>(id: Entity.ID, component: T) {
-        let componentType = registry.find(componentType: T.self)!
+        let componentType = ObjectIdentifier(T.Type.self)
         let entry: ComponentCollection<T> = findOrCreateStorageEntry(componentType: componentType)
         entry.append(id: id, component: component)
     }
     
     internal func get<T: Component>(entity: Entity.ID) -> T? {
-        return get(entity: entity, componentType: registry.find(componentType: T.self)!)
+        return get(entity: entity, componentType: ObjectIdentifier(T.Type.self))
     }
 
     internal func get<T: Component>(entity: Entity.ID, componentType: ComponentType) -> T? {
@@ -149,26 +145,3 @@ struct AnyComponentCollection {
         impl = e
     }
 }
-
-
-/// Component Registry is a mapping between your ComponentStruct.Type and a UInt32
-
-public struct ComponentTypeRegistry {
-    var store = [(Component.Type, ComponentStore.ComponentType)]()
-    private var maxTypeId: UInt32 = 0
-
-    mutating func register<T: Component>(component: T.Type) {
-        store.append((T.self, ComponentStore.ComponentType(id: maxTypeId)))
-        maxTypeId += 1
-    }
-
-    mutating func unregister<T: Component>(component: T.Type) {
-        store.removeAll{$0.0 == T.self}
-    }
-
-    func find<T: Component>(componentType: T.Type) -> ComponentStore.ComponentType? {
-        store.first(where: {$0.0 == T.self})?.1
-    }
-}
-
-
