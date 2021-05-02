@@ -23,8 +23,10 @@ extension ComponentStore {
         guard let entry: ComponentCollection<T> = findStorageEntry(componentType: T.ID)
         else { return }
         
-        entry.idToIndex.forEach{ i in
-            block(i.key, &entry.storage[i.value])
+        entry.storage.forEach{ (index, entry) in
+            // TODO: get a pointer here!
+            var e = entry
+            block(index, &e)
         }
     }
 
@@ -32,11 +34,14 @@ extension ComponentStore {
         let ea: ComponentCollection<A> = findStorageEntry(componentType: A.ID)!
         let eb: ComponentCollection<B> = findStorageEntry(componentType: B.ID)!
 
-        let all = zip(ea.idToIndex, eb.idToIndex)
-        
-        all.forEach{ (ia, ib) in
-            assert(ia.key == ib.key)
-            block(ia.key, &ea.storage[ia.value], &eb.storage[ib.value])
+        ea.storage.forEach{ (entity, a) in
+            var a = a
+            guard var b = eb[entity] else { return }
+            block(entity, &a, &b)
+            ea.storage[entity] = a
+            eb.storage[entity] = b
+//            assert(ia.key == ib.key)
+//            block(ia.key, &ea.storage[ia.value], &eb.storage[ib.value])
         }
     }
 

@@ -10,9 +10,10 @@ import Foundation
 
 typealias SparseIntSet = SparseArrayPaged<Void>
 
-
 // Based on sparse arrays in EnTT, and reference from fireblade-ecs swift
 // https://research.swtch.com/sparse
+// Useful in situations similar to [Index: Element], where Index is always relatively small
+// (ie at least n / pageSize) memory will be consumed where n = maximum index used
 @usableFromInline struct SparseArrayPaged<Element> {
     @usableFromInline
     typealias Index = Array<Element>.Index
@@ -29,15 +30,8 @@ typealias SparseIntSet = SparseArrayPaged<Void>
     var sparse = SparseArray()
     var dense: [DenseElement] = []
     
-    
     mutating func clear() {
         sparse = .init()
-    }
-    
-    mutating func set(_ e: Element, at index: Index) {
-        let denseIndex = count
-        dense.append((index, e))
-        sparse[index] = denseIndex
     }
     
     func has(_ index: Index) -> Bool {
@@ -104,6 +98,24 @@ extension SparseArrayPaged : RandomAccessCollection {
 
             return dense[denseIndex].element
         }
+        
+        set {
+            guard let newValue = newValue
+            else {
+                remove(at: index)
+                return
+            }
+            
+            if let denseIndex = sparse[index],
+               (0..<dense.count).contains(denseIndex),
+               dense[denseIndex].index == index {
+                dense[denseIndex] = (index, newValue)
+            } else {
+                let denseIndex = dense.count
+                sparse[index] = denseIndex
+                dense.append((index, newValue))
+            }
+        }
     
 
     }
@@ -145,6 +157,7 @@ extension SparseArrayPaged {
 
         
         // Still need to compare with what you got from dense, b/c this may be out of date
+        // May return invalid memory, ie completely bogus indices
         subscript(index: Int) -> Index? {
             get {
                 let (page, offset) = page(for: index)
@@ -156,7 +169,7 @@ extension SparseArrayPaged {
                 // guard sparsePage.header.used > 0 else { return false}
 
                 let buf = sparsePage.withUnsafeMutablePointerToElements{
-                    UnsafeBufferPointer(start: $0, count: pageCapacity)
+                    UnsafeBufferPointer(start: $0, count: Self.elementsPerPage)
                 }
                 return buf[offset]
             }
@@ -258,7 +271,7 @@ extension ManagedBuffer {
 extension SparseArrayPaged where Element == Void {
     
     mutating func insert(_ e: Index) {
-        set(Void(), at: e)
+        self[e] = Void()
     }
     
     mutating func remove(_ idx: Index) {

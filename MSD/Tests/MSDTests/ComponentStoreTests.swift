@@ -66,8 +66,10 @@ class ComponentStoreTests_macOS: XCTestCase {
         for _ in 0..<end {
             let _ = store.createEntity()
         }
+
+        let actual = store.ids.map{$0.index}
         
-        XCTAssertEqual(store.validIds, Set<Entity.ID>( Array(0..<Entity.ID(end)) ))
+        XCTAssertEqual(Set(actual), Set(0..<Entity.ID(end) ))
     }
     
 }
