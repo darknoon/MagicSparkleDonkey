@@ -47,22 +47,30 @@ public struct ComponentStore {
         storage[componentType]?.impl as? ComponentCollection<T>
     }
     
-    mutating func set<T: Component>(id: Entity.ID, component: T) {
-        let componentType = ObjectIdentifier(T.Type.self)
-        let entry: ComponentCollection<T> = findOrCreateStorageEntry(componentType: componentType)
-        entry[id] = component
-    }
-    
-    internal func get<T: Component>(entity: Entity.ID) -> T? {
-        return get(entity: entity, componentType: ObjectIdentifier(T.Type.self))
+    subscript<T: Component>(entity: Entity.ID) -> T? {
+        get {
+            let componentType = ObjectIdentifier(T.Type.self)
+            guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
+            else { return nil }
+            return entry.storage[entity]
+        }
+        // {set}?: should we allow nilling out a component?
+        // or default-reset to ComponentType.init()
     }
 
-    internal func get<T: Component>(entity: Entity.ID, componentType: ComponentType) -> T? {
-        guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
-        else { return nil }
-        return entry.storage[entity]
+    subscript<T: Component>(entity: Entity.ID) -> T {
+        get {
+            let componentType = ObjectIdentifier(T.Type.self)
+            let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)!
+            return entry.storage[entity]!
+        }
+        set(newValue) {
+            let componentType = ObjectIdentifier(T.Type.self)
+            let entry: ComponentCollection<T> = findOrCreateStorageEntry(componentType: componentType)
+            entry.storage[entity] = newValue
+        }
     }
-    
+
     private var storage: [ComponentType: AnyComponentCollection] = [:]
 
 }
@@ -75,11 +83,11 @@ class ComponentCollection<ComponentType: Component> {
     
     init() {}
     
+    @usableFromInline
     var count: Int { storage.count }
     var storage = SparseArrayPaged<ComponentType>()
 
     // Safe
-    @usableFromInline
     subscript(index: Index) -> Element? {
         get {
             return storage[index]
@@ -102,7 +110,10 @@ class ComponentCollection<ComponentType: Component> {
         AnyComponentCollection(e: self)
     }
     
-    // Collection
+}
+
+// Collection
+extension ComponentCollection : RandomAccessCollection {
     var startIndex: Int {
         return 0
     }
@@ -110,15 +121,10 @@ class ComponentCollection<ComponentType: Component> {
     var endIndex: Int {
         return count
     }
-    
-    func index(after i: Index) -> Index {
-        return i + 1
-    }
-
-    
 }
 
 
+// TODO: this could provide sensible methods?
 struct AnyComponentCollection {
     var impl: Any
     fileprivate init<T: Component>(e: ComponentCollection<T>) {

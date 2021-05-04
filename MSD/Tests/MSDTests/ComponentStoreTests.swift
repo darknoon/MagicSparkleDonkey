@@ -9,6 +9,24 @@ import XCTest
 @testable import MSD
 import simd
 
+// Old ones
+fileprivate extension ComponentStore {
+
+    mutating func set<T: Component>(id: Entity.ID, component: T) {
+        let componentType = ObjectIdentifier(T.Type.self)
+        let entry: ComponentCollection<T> = findOrCreateStorageEntry(componentType: componentType)
+        entry[id] = component
+    }
+    
+    func get<T: Component>(entity: Entity.ID) -> T? {
+        let componentType = ObjectIdentifier(T.Type.self)
+        guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
+        else { return nil }
+        return entry.storage[entity]
+    }
+
+}
+
 class ComponentStoreTests_macOS: XCTestCase {
 
     struct TestComponent : Component, Equatable {
@@ -70,6 +88,86 @@ class ComponentStoreTests_macOS: XCTestCase {
         let actual = store.ids.map{$0.index}
         
         XCTAssertEqual(Set(actual), Set(0..<Entity.ID(end) ))
+    }
+    
+    struct Counter : Component {
+        var count: Int
+        mutating func increment() {
+            count += 1
+        }
+    }
+    
+    func testMutateSingle() {
+        var store = ComponentStore()
+
+        let ents = (0...9).map{ _ in store.createEntity() }
+        
+        // Create counters initialized 0...9
+        for (i, entity) in ents.enumerated() {
+            store.set(id: entity, component: Counter(count: i))
+        }
+
+        // Update counters by 1
+        store.forEach{ (id: Entity.ID, counter: inout Counter) in
+            counter.increment()
+        }
+        
+        // Now check that they have been incremented
+        let values: [Counter] = ents.map{ store.get(entity: $0)! }
+        
+        XCTAssertEqual(values.map{$0.count}, Array(1...10))
+    }
+    
+    func testMutateTwoComponents() {
+        var store = ComponentStore()
+
+        let ents = (0...9).map{ _ in store.createEntity() }
+        
+        // Create counters initialized 0...9
+        for (i, entity) in ents.enumerated() {
+            store.set(id: entity, component: Counter(count: i))
+            store.set(id: entity, component: TestComponent(hello: i))
+        }
+
+        // Update counters by 1
+        store.forEach{ (id: Entity.ID, counter: inout Counter, testComponent: inout TestComponent) in
+            counter.increment()
+            testComponent.hello -= 1
+        }
+        
+        // Now check that they have been incremented
+        let counterValues: [Counter] = ents.map{ store.get(entity: $0)! }
+        let testValues: [TestComponent] = ents.map{ store.get(entity: $0)! }
+
+        XCTAssertEqual(counterValues.map{$0.count}, Array(1...10))
+        XCTAssertEqual(testValues.map{$0.hello}, Array(-1...8))
+    }
+    
+    func testMutateOneComponentIteratingTwo() {
+        var store = ComponentStore()
+
+        let r = 0...3
+        let ents = r.map{ _ in store.createEntity() }
+        
+        // Create counters initialized 0...9
+        for (i, entity) in ents.enumerated() {
+            store.set(id: entity, component: Counter(count: i))
+            store.set(id: entity, component: TestComponent(hello: i % 2))
+        }
+
+        // Update counters by 1, but just read testComponent, don't need to mutate it
+        store.forEach{ (id: Entity.ID, counter: inout Counter, testComponent: TestComponent) in
+            if testComponent.hello == 0 {
+                counter.increment()
+            }
+        }
+        
+        // Now check that they have been incremented
+        let counterValues: [Counter] = ents.map{ store.get(entity: $0)! }
+        let testValues: [TestComponent] = ents.map{ store.get(entity: $0)! }
+
+        XCTAssertEqual(counterValues.map{$0.count}, [1, 1, 3, 3])
+        XCTAssertEqual(testValues.map{$0.hello}, [0, 1, 0, 1])
     }
     
 }

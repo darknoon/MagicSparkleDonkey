@@ -14,7 +14,7 @@
             let s = scene
             // Get the root's transform
             
-            let t = (scene.store.get(entity: s.root) as TransformComponent?)?.transform
+            let t = (scene.store[s.root] as TransformComponent?)?.transform
             
             // Should be identity
             XCTAssertEqual(t, .identity)
@@ -23,10 +23,10 @@
         func testCustomComponent() {
             let e = scene.root
             
-            scene.store.set(id: e, component: TestComponent(hello: 111))
-            scene.store.set(id: e, component: TestComponent(hello: 123))
-            
-            let t = (scene.store.get(entity: e) as TestComponent?)?.hello
+            scene.store[e] = TestComponent(hello: 111)
+            scene.store[e] = TestComponent(hello: 123)
+
+            let t = (scene.store[e] as TestComponent?)?.hello
             XCTAssertEqual(t!, 123)
             
         }
