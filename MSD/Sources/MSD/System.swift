@@ -1,11 +1,5 @@
-//
-//  File.swift
-//  
-//
-//  Created by Andrew Pouliot on 4/17/21.
-//
 
-// Input to a frame
+// Input to each frame iteration
 struct StepInfo {
     let timestep: Double
 }
@@ -19,7 +13,7 @@ protocol System: Updatable {
     associatedtype Outputs
 }
 
-struct AnySystem {
+struct AnySystem: Updatable {
     private let update: (StepInfo, Scene) -> Void
     init<SystemType: System>(_ system: SystemType) {
         update = system.update

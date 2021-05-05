@@ -1,9 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Andrew Pouliot on 4/17/21.
-//
 
 public struct Scene {
     public init() {
