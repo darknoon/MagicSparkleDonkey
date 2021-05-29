@@ -7,8 +7,12 @@
 
 import SwiftUI
 import MetalKit
+import MSD
 
+
+// Insert a render output view into a SwiftUI hierarchy
 struct MSDView : PlatformViewRepresentable {
+    // Type inference has issues with PlatformViewRepresentable
     typealias NSViewType = MTKView
     typealias UIViewType = MTKView
 
@@ -18,8 +22,10 @@ struct MSDView : PlatformViewRepresentable {
     
     let device: MTLDevice
     
+    // Renderer and scene initialized when we are actually making the view
     class Coordinator {
         var renderer: Renderer? = nil
+        var scene = MSD.Scene()
     }
     
     var renderer: Renderer!
@@ -37,5 +43,4 @@ struct MSDView : PlatformViewRepresentable {
 
     func updateView(_ platformView: MTKView, context: Context) {}
 
-    
 }

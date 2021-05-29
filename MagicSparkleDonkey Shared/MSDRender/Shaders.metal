@@ -17,8 +17,8 @@ using namespace metal;
 
 typedef struct
 {
-    float3 position [[attribute(VertexAttributePosition)]];
-    float2 texCoord [[attribute(VertexAttributeTexcoord)]];
+    float3 position [[attribute(MSDVertexSemanticPosition)]];
+    float2 texCoord [[attribute(MSDVertexSemanticTexcoord0)]];
 } Vertex;
 
 typedef struct
@@ -28,7 +28,7 @@ typedef struct
 } ColorInOut;
 
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
-                               constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]])
+                               constant MSDUniforms& uniforms [[ buffer(MSDBufferIndexUniforms) ]])
 {
     ColorInOut out;
 
@@ -40,8 +40,8 @@ vertex ColorInOut vertexShader(Vertex in [[stage_in]],
 }
 
 fragment float4 fragmentShader(ColorInOut in [[stage_in]],
-                               constant Uniforms & uniforms [[ buffer(BufferIndexUniforms) ]],
-                               texture2d<half> colorMap     [[ texture(TextureIndexColor) ]])
+                               constant MSDUniforms& uniforms [[ buffer(MSDBufferIndexUniforms) ]],
+                               texture2d<half> colorMap     [[ texture(MSDTextureIndexColor) ]])
 {
     constexpr sampler colorSampler(mip_filter::linear,
                                    mag_filter::linear,

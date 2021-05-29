@@ -3,28 +3,41 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		4983897C2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4983897D2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4983897E2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
+		4993AED2265ACDE900B00EFB /* MeshResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECE265ACDE900B00EFB /* MeshResource.swift */; };
+		4993AED3265ACDE900B00EFB /* MeshResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECE265ACDE900B00EFB /* MeshResource.swift */; };
+		4993AED4265ACDE900B00EFB /* MeshResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECE265ACDE900B00EFB /* MeshResource.swift */; };
+		4993AED5265ACDE900B00EFB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECF265ACDE900B00EFB /* Shaders.metal */; };
+		4993AED6265ACDE900B00EFB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECF265ACDE900B00EFB /* Shaders.metal */; };
+		4993AED7265ACDE900B00EFB /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4993AECF265ACDE900B00EFB /* Shaders.metal */; };
+		4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
+		4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
+		4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
+		4993AEE7265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		4993AEE8265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		4993AEE9265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		4993AEEA265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
+		4993AEEB265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
+		4993AEEC265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
+		4993AEEF265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
+		4993AEF0265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
+		4993AEF1265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
+		4993AEFD265C7B2B00B00EFB /* MSD in Frameworks */ = {isa = PBXBuildFile; productRef = 4993AEFC265C7B2B00B00EFB /* MSD */; };
+		4993AF08265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
+		4993AF09265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
+		4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
 		49B9FCFD2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
 		49B9FCFE2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
 		49B9FCFF2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
 		49B9FD01265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD02265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD03265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
-		49FA474F261D8022003C3F8E /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 49FA4719261D8020003C3F8E /* Shaders.metal */; };
-		49FA4750261D8022003C3F8E /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 49FA4719261D8020003C3F8E /* Shaders.metal */; };
-		49FA4751261D8022003C3F8E /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 49FA4719261D8020003C3F8E /* Shaders.metal */; };
-		49FA4752261D8022003C3F8E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FA471A261D8020003C3F8E /* Renderer.swift */; };
-		49FA4753261D8022003C3F8E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FA471A261D8020003C3F8E /* Renderer.swift */; };
-		49FA4754261D8022003C3F8E /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FA471A261D8020003C3F8E /* Renderer.swift */; };
-		49FA4755261D8022003C3F8E /* ShaderTypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471B261D8020003C3F8E /* ShaderTypes.h */; };
-		49FA4756261D8022003C3F8E /* ShaderTypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471B261D8020003C3F8E /* ShaderTypes.h */; };
-		49FA4757261D8022003C3F8E /* ShaderTypes.h in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471B261D8020003C3F8E /* ShaderTypes.h */; };
 		49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
@@ -33,11 +46,18 @@
 /* Begin PBXFileReference section */
 		490A1AD3262AA3B1005B6AF4 /* MSD */ = {isa = PBXFileReference; lastKnownFileType = text; path = MSD; sourceTree = SOURCE_ROOT; };
 		4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewRepresentable.swift; sourceTree = "<group>"; };
+		4993AECE265ACDE900B00EFB /* MeshResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshResource.swift; sourceTree = "<group>"; };
+		4993AECF265ACDE900B00EFB /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		4993AED0265ACDE900B00EFB /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		4993AED1265ACDE900B00EFB /* RendererMetal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RendererMetal.swift; sourceTree = "<group>"; };
+		4993AEE5265C74B400B00EFB /* GPU.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPU.swift; sourceTree = "<group>"; };
+		4993AEE6265C74B400B00EFB /* GPUMetal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUMetal.swift; sourceTree = "<group>"; };
+		4993AEEE265C793300B00EFB /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
+		4993AEF2265C798C00B00EFB /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		4993AF02265CC50800B00EFB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		4993AF07265D6F8800B00EFB /* Forward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forward.swift; sourceTree = "<group>"; };
 		49B9FCFC2654587D00D86C34 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		49B9FD00265458A600D86C34 /* MSDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDView.swift; sourceTree = "<group>"; };
-		49FA4719261D8020003C3F8E /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
-		49FA471A261D8020003C3F8E /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
-		49FA471B261D8020003C3F8E /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		49FA471C261D8022003C3F8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicSparkleDonkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FA472E261D8022003C3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -67,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4993AEFD265C7B2B00B00EFB /* MSD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +102,51 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		4993AECD265ACDE900B00EFB /* MSDRender */ = {
+			isa = PBXGroup;
+			children = (
+				4993AF06265D6F7300B00EFB /* Passes */,
+				4993AED0265ACDE900B00EFB /* ShaderTypes.h */,
+				4993AEE4265C74B400B00EFB /* GPU */,
+				4993AECE265ACDE900B00EFB /* MeshResource.swift */,
+				4993AECF265ACDE900B00EFB /* Shaders.metal */,
+				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
+			);
+			path = MSDRender;
+			sourceTree = "<group>";
+		};
+		4993AEE4265C74B400B00EFB /* GPU */ = {
+			isa = PBXGroup;
+			children = (
+				4993AEE5265C74B400B00EFB /* GPU.swift */,
+				4993AEE6265C74B400B00EFB /* GPUMetal.swift */,
+			);
+			path = GPU;
+			sourceTree = "<group>";
+		};
+		4993AEED265C792700B00EFB /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				4993AEEE265C793300B00EFB /* Resources.swift */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		4993AEF3265C7A5100B00EFB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4993AF06265D6F7300B00EFB /* Passes */ = {
+			isa = PBXGroup;
+			children = (
+				4993AF07265D6F8800B00EFB /* Forward.swift */,
+			);
+			path = Passes;
+			sourceTree = "<group>";
+		};
 		49FA4713261D8020003C3F8E = {
 			isa = PBXGroup;
 			children = (
@@ -89,20 +155,22 @@
 				49FA4723261D8022003C3F8E /* MagicSparkleDonkey iOS */,
 				49FA4734261D8022003C3F8E /* MagicSparkleDonkey tvOS */,
 				49FA4745261D8022003C3F8E /* MagicSparkleDonkey macOS */,
+				4993AF02265CC50800B00EFB /* Resources */,
 				49FA4722261D8022003C3F8E /* Products */,
+				4993AEF3265C7A5100B00EFB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		49FA4718261D8020003C3F8E /* MagicSparkleDonkey Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4993AEF2265C798C00B00EFB /* BridgingHeader.h */,
+				4993AEED265C792700B00EFB /* Resource */,
 				4983897A265824240046E96E /* Common */,
-				49FA4719261D8020003C3F8E /* Shaders.metal */,
-				49FA471A261D8020003C3F8E /* Renderer.swift */,
-				49FA471B261D8020003C3F8E /* ShaderTypes.h */,
 				49FA471C261D8022003C3F8E /* Assets.xcassets */,
 				49B9FCFC2654587D00D86C34 /* App.swift */,
 				49B9FD00265458A600D86C34 /* MSDView.swift */,
+				4993AECD265ACDE900B00EFB /* MSDRender */,
 			);
 			path = "MagicSparkleDonkey Shared";
 			sourceTree = "<group>";
@@ -158,6 +226,8 @@
 			dependencies = (
 			);
 			name = "MagicSparkleDonkey iOS";
+			packageProductDependencies = (
+			);
 			productName = "MagicSparkleDonkey iOS";
 			productReference = 49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */;
 			productType = "com.apple.product-type.application";
@@ -190,8 +260,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				4993AEFF265C7BA500B00EFB /* PBXTargetDependency */,
 			);
 			name = "MagicSparkleDonkey macOS";
+			packageProductDependencies = (
+				4993AEFC265C7B2B00B00EFB /* MSD */,
+			);
 			productName = "MagicSparkleDonkey macOS";
 			productReference = 49FA4744261D8022003C3F8E /* MagicSparkleDonkey.app */;
 			productType = "com.apple.product-type.application";
@@ -241,7 +315,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FA4755261D8022003C3F8E /* ShaderTypes.h in Resources */,
 				49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -250,7 +323,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FA4756261D8022003C3F8E /* ShaderTypes.h in Resources */,
 				49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,7 +332,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */,
-				49FA4757261D8022003C3F8E /* ShaderTypes.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,11 +342,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FA4752261D8022003C3F8E /* Renderer.swift in Sources */,
-				49FA474F261D8022003C3F8E /* Shaders.metal in Sources */,
+				4993AEEA265C74B400B00EFB /* GPUMetal.swift in Sources */,
 				49B9FCFD2654587D00D86C34 /* App.swift in Sources */,
 				4983897C2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
+				4993AEE7265C74B400B00EFB /* GPU.swift in Sources */,
+				4993AED2265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD01265458A600D86C34 /* MSDView.swift in Sources */,
+				4993AEEF265C793300B00EFB /* Resources.swift in Sources */,
+				4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				4993AED5265ACDE900B00EFB /* Shaders.metal in Sources */,
+				4993AF08265D6F8800B00EFB /* Forward.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,11 +359,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FA4753261D8022003C3F8E /* Renderer.swift in Sources */,
-				49FA4750261D8022003C3F8E /* Shaders.metal in Sources */,
+				4993AEEB265C74B400B00EFB /* GPUMetal.swift in Sources */,
 				49B9FCFE2654587D00D86C34 /* App.swift in Sources */,
 				4983897D2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
+				4993AEE8265C74B400B00EFB /* GPU.swift in Sources */,
+				4993AED3265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD02265458A600D86C34 /* MSDView.swift in Sources */,
+				4993AEF0265C793300B00EFB /* Resources.swift in Sources */,
+				4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				4993AED6265ACDE900B00EFB /* Shaders.metal in Sources */,
+				4993AF09265D6F8800B00EFB /* Forward.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,15 +376,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49FA4754261D8022003C3F8E /* Renderer.swift in Sources */,
-				49FA4751261D8022003C3F8E /* Shaders.metal in Sources */,
+				4993AEEC265C74B400B00EFB /* GPUMetal.swift in Sources */,
 				49B9FCFF2654587D00D86C34 /* App.swift in Sources */,
 				4983897E2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
+				4993AEE9265C74B400B00EFB /* GPU.swift in Sources */,
+				4993AED4265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD03265458A600D86C34 /* MSDView.swift in Sources */,
+				4993AEF1265C793300B00EFB /* Resources.swift in Sources */,
+				4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				4993AED7265ACDE900B00EFB /* Shaders.metal in Sources */,
+				4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4993AEFF265C7BA500B00EFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 4993AEFE265C7BA500B00EFB /* MSD */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		49FA475B261D8022003C3F8E /* Debug */ = {
@@ -361,6 +454,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/BridgingHeader.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -413,6 +507,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/BridgingHeader.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
@@ -433,7 +528,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -455,7 +549,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -477,7 +570,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = appletvos;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 14.5;
@@ -499,7 +591,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = appletvos;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 14.5;
@@ -526,7 +617,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -550,7 +640,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.darknoon.MagicSparkleDonkey;
 				PRODUCT_NAME = MagicSparkleDonkey;
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "MagicSparkleDonkey Shared/ShaderTypes.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -595,6 +684,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4993AEFC265C7B2B00B00EFB /* MSD */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MSD;
+		};
+		4993AEFE265C7BA500B00EFB /* MSD */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MSD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 49FA4714261D8020003C3F8E /* Project object */;
 }

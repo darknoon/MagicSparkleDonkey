@@ -102,13 +102,13 @@ class Renderer: NSObject, MTKViewDelegate {
         
         let mtlVertexDescriptor = MTLVertexDescriptor()
         
-        mtlVertexDescriptor.attributes[VertexAttribute.position.rawValue].format = MTLVertexFormat.float3
-        mtlVertexDescriptor.attributes[VertexAttribute.position.rawValue].offset = 0
-        mtlVertexDescriptor.attributes[VertexAttribute.position.rawValue].bufferIndex = BufferIndex.meshPositions.rawValue
+        mtlVertexDescriptor.attributes[VertexSemantic.position.rawValue].format = MTLVertexFormat.float3
+        mtlVertexDescriptor.attributes[VertexSemantic.position.rawValue].offset = 0
+        mtlVertexDescriptor.attributes[VertexSemantic.position.rawValue].bufferIndex = BufferIndex.meshPositions.rawValue
         
-        mtlVertexDescriptor.attributes[VertexAttribute.texcoord.rawValue].format = MTLVertexFormat.float2
-        mtlVertexDescriptor.attributes[VertexAttribute.texcoord.rawValue].offset = 0
-        mtlVertexDescriptor.attributes[VertexAttribute.texcoord.rawValue].bufferIndex = BufferIndex.meshGenerics.rawValue
+        mtlVertexDescriptor.attributes[VertexSemantic.texcoord0.rawValue].format = MTLVertexFormat.float2
+        mtlVertexDescriptor.attributes[VertexSemantic.texcoord0.rawValue].offset = 0
+        mtlVertexDescriptor.attributes[VertexSemantic.texcoord0.rawValue].bufferIndex = BufferIndex.meshGenerics.rawValue
         
         mtlVertexDescriptor.layouts[BufferIndex.meshPositions.rawValue].stride = 12
         mtlVertexDescriptor.layouts[BufferIndex.meshPositions.rawValue].stepRate = 1
@@ -162,8 +162,8 @@ class Renderer: NSObject, MTKViewDelegate {
         guard let attributes = mdlVertexDescriptor.attributes as? [MDLVertexAttribute] else {
             throw RendererError.badVertexDescriptor
         }
-        attributes[VertexAttribute.position.rawValue].name = MDLVertexAttributePosition
-        attributes[VertexAttribute.texcoord.rawValue].name = MDLVertexAttributeTextureCoordinate
+        attributes[VertexSemantic.position.rawValue].name = MDLVertexAttributePosition
+        attributes[VertexSemantic.texcoord0.rawValue].name = MDLVertexAttributeTextureCoordinate
         
         mdlMesh.vertexDescriptor = mdlVertexDescriptor
         
