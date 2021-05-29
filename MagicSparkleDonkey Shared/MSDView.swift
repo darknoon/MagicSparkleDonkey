@@ -24,11 +24,12 @@ struct MSDView : PlatformViewRepresentable {
     
     // Renderer and scene initialized when we are actually making the view
     class Coordinator {
-        var renderer: Renderer? = nil
+        var renderer: RendererMetal? = nil
         var scene = MSD.Scene()
+        var currentError: Error? = nil
     }
     
-    var renderer: Renderer!
+    var renderer: RendererMetal!
     
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -36,8 +37,13 @@ struct MSDView : PlatformViewRepresentable {
     
     func makeView(context: Context) -> MTKView {
         let v = MTKView(frame: .zero, device: device)
-        context.coordinator.renderer = Renderer(metalKitView: v)
-        v.delegate = context.coordinator.renderer
+        do {
+            let r = try RendererMetal(metalKitView: v)
+            context.coordinator.renderer = r
+            v.delegate = r
+        } catch {
+            context.coordinator.currentError = error
+        }
         return v
     }
 
