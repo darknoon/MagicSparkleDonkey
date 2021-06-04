@@ -66,9 +66,10 @@ class RendererGeneric<GPU: GPUAPI> {
         
         self.dynamicUniformBuffer.label = "UniformBuffer"
         
-        if let dataPtr = dynamicUniformBuffer.data {
-            uniforms = dataPtr.bindMemory(to:Uniforms.self, capacity:1)
-        }
+        guard let dataPtr = dynamicUniformBuffer.data
+        else { throw Failure.gpuAllocationError }
+
+        uniforms = dataPtr.bindMemory(to:Uniforms.self, capacity:1)
 
         // TODO: configure swap chain?
         //        metalKitView.depthStencilPixelFormat = GPUPixelFormat.depth32Float_stencil8
@@ -103,6 +104,7 @@ class RendererGeneric<GPU: GPUAPI> {
             print("Unable to load texture. Error info: \(error)")
             throw Failure.textureLoad(underlying: error)
         }
+        
     }
     
     class func buildMetalVertexDescriptor() -> GPU.VertexDescriptor {
@@ -198,6 +200,13 @@ class RendererGeneric<GPU: GPUAPI> {
         
         return try device.prepareMesh(mesh: mdlMesh, vertexDescriptor: buildMetalVertexDescriptor())
     }
+    
+    class func buildMesh(device: GPU.Device,
+                         vertexDescriptor: GPUVertexDescriptor) throws -> GPU.MeshRuntimeType
+    {
+        fatalError("Must use other override")
+    }
+
     
     class func loadTexture(device: GPU.Device,
                            textureName: String) throws -> GPU.Texture {

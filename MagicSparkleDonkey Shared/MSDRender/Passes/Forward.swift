@@ -68,7 +68,7 @@ struct ForwardPass<GPU: GPUAPI> : Pass {
     }
     
     #if canImport(ModelIO)
-    func boxGeometry() -> MDLMesh {
+    static func boxGeometry(device: GPU.Device) -> MDLMesh {
         let alloc = GPU.MeshBufferAllocator(device: device)
         return MDLMesh.newBox(
             withDimensions: SIMD3<Float>(4, 4, 4),
@@ -82,17 +82,24 @@ struct ForwardPass<GPU: GPUAPI> : Pass {
 
     struct InvalidMeshInput: GPUMeshInput {}
     
-    func boxGeometry() -> some GPUMeshInput {
+    static func boxGeometry(device: GPU.Device) -> some GPUMeshInput {
         return InvalidMeshInput()
     }
     
     
     init(device: GPU) throws {
         self.device = device
+
         guard let library = device.defaultLibrary
         else { throw Failure.shaderCompilationError(underlying: nil) }
+
         guard let depthWriteState = device.makeDepthStencilState(descriptor: .init(writeDepth: true))
         else { throw Failure.unexpectedMetalError }
+
+        let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
+        
+        guard let dynamicUniformBuffer = self.device.makeBuffer(length:uniformBufferSize, storageMode: .shared)
+        else { throw Failure.gpuAllocationError }
 
         let vertexFunction: GPU.Function
         let fragmentFunction: GPU.Function
@@ -112,11 +119,10 @@ struct ForwardPass<GPU: GPUAPI> : Pass {
         
         let mesh: GPU.MeshRuntimeType
         do {
-            mesh = try device.prepareMesh(mesh: boxGeometry(), vertexDescriptor: Self.vertexDescriptor0)
+            mesh = try device.prepareMesh(mesh: Self.boxGeometry(device: device), vertexDescriptor: Self.vertexDescriptor0)
         }
 
-        let buffer: GPU.Buffer
-        state = State(depthWriteState: depthWriteState, pipelineState: pipeline, dynamicUniformBuffer: buffer, mesh: mesh, uniformBufferOffset: 0)
+        state = State(depthWriteState: depthWriteState, pipelineState: pipeline, dynamicUniformBuffer: dynamicUniformBuffer, mesh: mesh, uniformBufferOffset: 0)
     }
     
     func encode(buffer: GPU.CommandBuffer, surface: GPU.SwapChain) throws {

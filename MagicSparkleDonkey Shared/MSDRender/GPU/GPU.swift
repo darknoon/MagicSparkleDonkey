@@ -285,7 +285,6 @@ protocol GPUSubmesh {
     var indexBuffer: MeshIndexBuffer { get }
 
     var indexCount: Int { get }
-    
 }
 
 protocol GPUTexture {
