@@ -1,14 +1,14 @@
 
 // Input to each frame iteration
-struct StepInfo {
+public struct StepInfo {
     let timestep: Double
 }
 
-protocol Updatable {
+public protocol Updatable {
     func update(stepInfo: StepInfo, scene: Scene)
 }
 
-protocol System: Updatable {
+public protocol System: Updatable {
     associatedtype Inputs
     associatedtype Outputs
 }

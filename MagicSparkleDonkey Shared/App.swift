@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct MSDApp : App {
-    var body: some Scene {
+    var body: some SwiftUI.Scene {
         WindowGroup {
             MSDView()
                 .edgesIgnoringSafeArea(.all)

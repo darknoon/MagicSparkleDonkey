@@ -5,10 +5,8 @@
 //  Created by Andrew Pouliot on 5/24/21.
 //
 
-import MSD
-
 /// TODO: generate this
-extension MSD.ResourceBundle {
+extension ResourceBundle {
     
     var cube: MeshResource {
         MeshResource(id: 123, path: "Resources/Cube.obj")

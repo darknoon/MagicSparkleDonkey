@@ -7,8 +7,6 @@
 
 import SwiftUI
 import MetalKit
-import MSD
-
 
 // Insert a render output view into a SwiftUI hierarchy
 struct MSDView : PlatformViewRepresentable {
@@ -23,12 +21,20 @@ struct MSDView : PlatformViewRepresentable {
     let device: MTLDevice
     
     // Renderer and scene initialized when we are actually making the view
-    class Coordinator {
+    class Coordinator: NSObject, MTKViewDelegate {
         var renderer: RendererMetal? = nil
-        var scene = MSD.Scene()
+        var scene = Scene()
         var currentError: Error? = nil
+
+        func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+            renderer?.mtkView(view, drawableSizeWillChange: size)
+        }
+        
+        func draw(in view: MTKView) {
+            renderer?.draw(in: view)
+        }
     }
-    
+
     var renderer: RendererMetal!
     
     func makeCoordinator() -> Coordinator {
@@ -40,7 +46,7 @@ struct MSDView : PlatformViewRepresentable {
         do {
             let r = try RendererMetal(metalKitView: v)
             context.coordinator.renderer = r
-            v.delegate = r
+            v.delegate = context.coordinator
         } catch {
             context.coordinator.currentError = error
         }

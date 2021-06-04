@@ -10,12 +10,6 @@
 import Metal
 import MetalKit
 import simd
-import MSD
-
-// The 256 byte aligned size of our uniform structure
-let alignedUniformsSize = (MemoryLayout<Uniforms>.size + 0xFF) & -0x100
-
-let maxBuffersInFlight = 3
 
 enum RendererError: Error {
     case badVertexDescriptor
@@ -26,8 +20,13 @@ enum RendererError: Error {
     case textureLoad(mtkError: Error)
 }
 
-class RendererMetal: NSObject, MTKViewDelegate {
-    
+class RendererMetal {
+    // The 256 byte aligned size of our uniform structure
+    let alignedUniformsSize = (MemoryLayout<Uniforms>.size + 0xFF) & -0x100
+
+    static let maxBuffersInFlight = 3
+
+
     public let device: MTLDevice
 
     typealias Failure = RendererError
@@ -59,7 +58,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
         guard let queue = self.device.makeCommandQueue() else { throw Failure.unexpectedMetalError }
         self.commandQueue = queue
         
-        let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
+        let uniformBufferSize = alignedUniformsSize * Self.maxBuffersInFlight
         
         guard let buffer = self.device.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared]) else { throw Failure.metalAllocationError }
         dynamicUniformBuffer = buffer
@@ -102,8 +101,6 @@ class RendererMetal: NSObject, MTKViewDelegate {
             print("Unable to load texture. Error info: \(error)")
             throw Failure.textureLoad(mtkError: error)
         }
-        
-        super.init()
     }
     
     class func buildMetalVertexDescriptor() -> MTLVertexDescriptor {
@@ -201,7 +198,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
     private func updateDynamicBufferState() {
         /// Update the state of our uniform buffers before rendering
         
-        uniformBufferIndex = (uniformBufferIndex + 1) % maxBuffersInFlight
+        uniformBufferIndex = (uniformBufferIndex + 1) % Self.maxBuffersInFlight
         
         uniformBufferOffset = alignedUniformsSize * uniformBufferIndex
         

@@ -3,10 +3,49 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		491167572663732C007C7BF5 /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		491167582663732D007C7BF5 /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		491167592663732E007C7BF5 /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
+		4911676D266373B3007C7BF5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675C266373B3007C7BF5 /* Scene.swift */; };
+		4911676E266373B3007C7BF5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675C266373B3007C7BF5 /* Scene.swift */; };
+		4911676F266373B3007C7BF5 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675C266373B3007C7BF5 /* Scene.swift */; };
+		49116770266373B3007C7BF5 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675D266373B3007C7BF5 /* Entity.swift */; };
+		49116771266373B3007C7BF5 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675D266373B3007C7BF5 /* Entity.swift */; };
+		49116772266373B3007C7BF5 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675D266373B3007C7BF5 /* Entity.swift */; };
+		49116773266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675F266373B3007C7BF5 /* PerspectiveCamera.swift */; };
+		49116774266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675F266373B3007C7BF5 /* PerspectiveCamera.swift */; };
+		49116775266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911675F266373B3007C7BF5 /* PerspectiveCamera.swift */; };
+		49116776266373B3007C7BF5 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116760266373B3007C7BF5 /* Transform.swift */; };
+		49116777266373B3007C7BF5 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116760266373B3007C7BF5 /* Transform.swift */; };
+		49116778266373B3007C7BF5 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116760266373B3007C7BF5 /* Transform.swift */; };
+		49116779266373B3007C7BF5 /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116761266373B3007C7BF5 /* Hierarchy.swift */; };
+		4911677A266373B3007C7BF5 /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116761266373B3007C7BF5 /* Hierarchy.swift */; };
+		4911677B266373B3007C7BF5 /* Hierarchy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116761266373B3007C7BF5 /* Hierarchy.swift */; };
+		4911677C266373B3007C7BF5 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116762266373B3007C7BF5 /* System.swift */; };
+		4911677D266373B3007C7BF5 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116762266373B3007C7BF5 /* System.swift */; };
+		4911677E266373B3007C7BF5 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116762266373B3007C7BF5 /* System.swift */; };
+		4911677F266373B3007C7BF5 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116763266373B3007C7BF5 /* Component.swift */; };
+		49116780266373B3007C7BF5 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116763266373B3007C7BF5 /* Component.swift */; };
+		49116781266373B3007C7BF5 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116763266373B3007C7BF5 /* Component.swift */; };
+		49116782266373B3007C7BF5 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116765266373B3007C7BF5 /* Resource.swift */; };
+		49116783266373B3007C7BF5 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116765266373B3007C7BF5 /* Resource.swift */; };
+		49116784266373B3007C7BF5 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116765266373B3007C7BF5 /* Resource.swift */; };
+		49116788266373B3007C7BF5 /* Sparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116768266373B3007C7BF5 /* Sparse.swift */; };
+		49116789266373B3007C7BF5 /* Sparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116768266373B3007C7BF5 /* Sparse.swift */; };
+		4911678A266373B3007C7BF5 /* Sparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116768266373B3007C7BF5 /* Sparse.swift */; };
+		4911678B266373B3007C7BF5 /* ComponentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116769266373B3007C7BF5 /* ComponentStore.swift */; };
+		4911678C266373B3007C7BF5 /* ComponentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116769266373B3007C7BF5 /* ComponentStore.swift */; };
+		4911678D266373B3007C7BF5 /* ComponentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49116769266373B3007C7BF5 /* ComponentStore.swift */; };
+		4911678E266373B3007C7BF5 /* ComponentIteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676A266373B3007C7BF5 /* ComponentIteration.swift */; };
+		4911678F266373B3007C7BF5 /* ComponentIteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676A266373B3007C7BF5 /* ComponentIteration.swift */; };
+		49116790266373B3007C7BF5 /* ComponentIteration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676A266373B3007C7BF5 /* ComponentIteration.swift */; };
+		49116791266373B3007C7BF5 /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676C266373B3007C7BF5 /* Extras.swift */; };
+		49116792266373B3007C7BF5 /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676C266373B3007C7BF5 /* Extras.swift */; };
+		49116793266373B3007C7BF5 /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911676C266373B3007C7BF5 /* Extras.swift */; };
 		4983897C2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4983897D2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4983897E2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
@@ -19,16 +58,9 @@
 		4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
 		4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
 		4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AED1265ACDE900B00EFB /* RendererMetal.swift */; };
-		4993AEE7265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
-		4993AEE8265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
-		4993AEE9265C74B400B00EFB /* GPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE5265C74B400B00EFB /* GPU.swift */; };
-		4993AEEA265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
-		4993AEEB265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
-		4993AEEC265C74B400B00EFB /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
 		4993AEEF265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
 		4993AEF0265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
 		4993AEF1265C793300B00EFB /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEEE265C793300B00EFB /* Resources.swift */; };
-		4993AEFD265C7B2B00B00EFB /* MSD in Frameworks */ = {isa = PBXBuildFile; productRef = 4993AEFC265C7B2B00B00EFB /* MSD */; };
 		4993AF08265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
 		4993AF09265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
 		4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AF07265D6F8800B00EFB /* Forward.swift */; };
@@ -38,13 +70,33 @@
 		49B9FD01265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD02265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD03265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
+		49EECE5C2664D89F0055E6B8 /* RendererGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EECE5B2664D8740055E6B8 /* RendererGeneric.swift */; };
+		49EECE5D2664D8A00055E6B8 /* RendererGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EECE5B2664D8740055E6B8 /* RendererGeneric.swift */; };
+		49EECE5E2664D8A00055E6B8 /* RendererGeneric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EECE5B2664D8740055E6B8 /* RendererGeneric.swift */; };
+		49EECE5F2666E40F0055E6B8 /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
+		49EECE602666E4100055E6B8 /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
+		49EECE612666E4100055E6B8 /* GPUMetal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4993AEE6265C74B400B00EFB /* GPUMetal.swift */; };
 		49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
+		49FD323026632B3D007D19EF /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD322F26632B3D007D19EF /* RenderSystem.swift */; };
+		49FD323126632B3D007D19EF /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD322F26632B3D007D19EF /* RenderSystem.swift */; };
+		49FD323226632B3D007D19EF /* RenderSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FD322F26632B3D007D19EF /* RenderSystem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		490A1AD3262AA3B1005B6AF4 /* MSD */ = {isa = PBXFileReference; lastKnownFileType = text; path = MSD; sourceTree = SOURCE_ROOT; };
+		4911675C266373B3007C7BF5 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		4911675D266373B3007C7BF5 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
+		4911675F266373B3007C7BF5 /* PerspectiveCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerspectiveCamera.swift; sourceTree = "<group>"; };
+		49116760266373B3007C7BF5 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
+		49116761266373B3007C7BF5 /* Hierarchy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hierarchy.swift; sourceTree = "<group>"; };
+		49116762266373B3007C7BF5 /* System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		49116763266373B3007C7BF5 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
+		49116765266373B3007C7BF5 /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
+		49116768266373B3007C7BF5 /* Sparse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sparse.swift; sourceTree = "<group>"; };
+		49116769266373B3007C7BF5 /* ComponentStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentStore.swift; sourceTree = "<group>"; };
+		4911676A266373B3007C7BF5 /* ComponentIteration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComponentIteration.swift; sourceTree = "<group>"; };
+		4911676C266373B3007C7BF5 /* Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extras.swift; sourceTree = "<group>"; };
 		4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewRepresentable.swift; sourceTree = "<group>"; };
 		4993AECE265ACDE900B00EFB /* MeshResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshResource.swift; sourceTree = "<group>"; };
 		4993AECF265ACDE900B00EFB /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -58,6 +110,7 @@
 		4993AF07265D6F8800B00EFB /* Forward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forward.swift; sourceTree = "<group>"; };
 		49B9FCFC2654587D00D86C34 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		49B9FD00265458A600D86C34 /* MSDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDView.swift; sourceTree = "<group>"; };
+		49EECE5B2664D8740055E6B8 /* RendererGeneric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RendererGeneric.swift; sourceTree = "<group>"; };
 		49FA471C261D8022003C3F8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicSparkleDonkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FA472E261D8022003C3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +119,7 @@
 		49FA4744261D8022003C3F8E /* MagicSparkleDonkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicSparkleDonkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FA474D261D8022003C3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		49FA474E261D8022003C3F8E /* MagicSparkleDonkey_macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MagicSparkleDonkey_macOS.entitlements; sourceTree = "<group>"; };
+		49FD322F26632B3D007D19EF /* RenderSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderSystem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,13 +141,64 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4993AEFD265C7B2B00B00EFB /* MSD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4911675B266373B3007C7BF5 /* MSD */ = {
+			isa = PBXGroup;
+			children = (
+				4911675C266373B3007C7BF5 /* Scene.swift */,
+				4911675D266373B3007C7BF5 /* Entity.swift */,
+				4911675E266373B3007C7BF5 /* Components */,
+				49116762266373B3007C7BF5 /* System.swift */,
+				49116763266373B3007C7BF5 /* Component.swift */,
+				49116764266373B3007C7BF5 /* Resource */,
+				49116767266373B3007C7BF5 /* Store */,
+				4911676B266373B3007C7BF5 /* Extras */,
+			);
+			name = MSD;
+			path = "MagicSparkleDonkey Shared/MSD";
+			sourceTree = SOURCE_ROOT;
+		};
+		4911675E266373B3007C7BF5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				4911675F266373B3007C7BF5 /* PerspectiveCamera.swift */,
+				49116760266373B3007C7BF5 /* Transform.swift */,
+				49116761266373B3007C7BF5 /* Hierarchy.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		49116764266373B3007C7BF5 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				49116765266373B3007C7BF5 /* Resource.swift */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		49116767266373B3007C7BF5 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				49116768266373B3007C7BF5 /* Sparse.swift */,
+				49116769266373B3007C7BF5 /* ComponentStore.swift */,
+				4911676A266373B3007C7BF5 /* ComponentIteration.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		4911676B266373B3007C7BF5 /* Extras */ = {
+			isa = PBXGroup;
+			children = (
+				4911676C266373B3007C7BF5 /* Extras.swift */,
+			);
+			path = Extras;
+			sourceTree = "<group>";
+		};
 		4983897A265824240046E96E /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -105,11 +210,13 @@
 		4993AECD265ACDE900B00EFB /* MSDRender */ = {
 			isa = PBXGroup;
 			children = (
+				49FD322F26632B3D007D19EF /* RenderSystem.swift */,
 				4993AF06265D6F7300B00EFB /* Passes */,
 				4993AED0265ACDE900B00EFB /* ShaderTypes.h */,
 				4993AEE4265C74B400B00EFB /* GPU */,
 				4993AECE265ACDE900B00EFB /* MeshResource.swift */,
 				4993AECF265ACDE900B00EFB /* Shaders.metal */,
+				49EECE5B2664D8740055E6B8 /* RendererGeneric.swift */,
 				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
 			);
 			path = MSDRender;
@@ -150,7 +257,6 @@
 		49FA4713261D8020003C3F8E = {
 			isa = PBXGroup;
 			children = (
-				490A1AD3262AA3B1005B6AF4 /* MSD */,
 				49FA4718261D8020003C3F8E /* MagicSparkleDonkey Shared */,
 				49FA4723261D8022003C3F8E /* MagicSparkleDonkey iOS */,
 				49FA4734261D8022003C3F8E /* MagicSparkleDonkey tvOS */,
@@ -164,6 +270,7 @@
 		49FA4718261D8020003C3F8E /* MagicSparkleDonkey Shared */ = {
 			isa = PBXGroup;
 			children = (
+				4911675B266373B3007C7BF5 /* MSD */,
 				4993AEF2265C798C00B00EFB /* BridgingHeader.h */,
 				4993AEED265C792700B00EFB /* Resource */,
 				4983897A265824240046E96E /* Common */,
@@ -260,11 +367,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				4993AEFF265C7BA500B00EFB /* PBXTargetDependency */,
 			);
 			name = "MagicSparkleDonkey macOS";
 			packageProductDependencies = (
-				4993AEFC265C7B2B00B00EFB /* MSD */,
 			);
 			productName = "MagicSparkleDonkey macOS";
 			productReference = 49FA4744261D8022003C3F8E /* MagicSparkleDonkey.app */;
@@ -342,16 +447,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4993AEEA265C74B400B00EFB /* GPUMetal.swift in Sources */,
+				49EECE5F2666E40F0055E6B8 /* GPUMetal.swift in Sources */,
 				49B9FCFD2654587D00D86C34 /* App.swift in Sources */,
 				4983897C2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
-				4993AEE7265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED2265ACDE900B00EFB /* MeshResource.swift in Sources */,
+				4911678E266373B3007C7BF5 /* ComponentIteration.swift in Sources */,
+				4911677F266373B3007C7BF5 /* Component.swift in Sources */,
+				49116773266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */,
 				49B9FD01265458A600D86C34 /* MSDView.swift in Sources */,
+				491167572663732C007C7BF5 /* GPU.swift in Sources */,
 				4993AEEF265C793300B00EFB /* Resources.swift in Sources */,
+				49FD323026632B3D007D19EF /* RenderSystem.swift in Sources */,
+				49116791266373B3007C7BF5 /* Extras.swift in Sources */,
+				49EECE5C2664D89F0055E6B8 /* RendererGeneric.swift in Sources */,
+				49116782266373B3007C7BF5 /* Resource.swift in Sources */,
 				4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				49116779266373B3007C7BF5 /* Hierarchy.swift in Sources */,
+				49116788266373B3007C7BF5 /* Sparse.swift in Sources */,
+				49116770266373B3007C7BF5 /* Entity.swift in Sources */,
+				49116776266373B3007C7BF5 /* Transform.swift in Sources */,
+				4911677C266373B3007C7BF5 /* System.swift in Sources */,
 				4993AED5265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF08265D6F8800B00EFB /* Forward.swift in Sources */,
+				4911676D266373B3007C7BF5 /* Scene.swift in Sources */,
+				4911678B266373B3007C7BF5 /* ComponentStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,16 +478,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4993AEEB265C74B400B00EFB /* GPUMetal.swift in Sources */,
+				49EECE602666E4100055E6B8 /* GPUMetal.swift in Sources */,
 				49B9FCFE2654587D00D86C34 /* App.swift in Sources */,
 				4983897D2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
-				4993AEE8265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED3265ACDE900B00EFB /* MeshResource.swift in Sources */,
+				4911678F266373B3007C7BF5 /* ComponentIteration.swift in Sources */,
+				49116780266373B3007C7BF5 /* Component.swift in Sources */,
+				49116774266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */,
 				49B9FD02265458A600D86C34 /* MSDView.swift in Sources */,
+				491167582663732D007C7BF5 /* GPU.swift in Sources */,
 				4993AEF0265C793300B00EFB /* Resources.swift in Sources */,
+				49FD323126632B3D007D19EF /* RenderSystem.swift in Sources */,
+				49116792266373B3007C7BF5 /* Extras.swift in Sources */,
+				49EECE5D2664D8A00055E6B8 /* RendererGeneric.swift in Sources */,
+				49116783266373B3007C7BF5 /* Resource.swift in Sources */,
 				4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				4911677A266373B3007C7BF5 /* Hierarchy.swift in Sources */,
+				49116789266373B3007C7BF5 /* Sparse.swift in Sources */,
+				49116771266373B3007C7BF5 /* Entity.swift in Sources */,
+				49116777266373B3007C7BF5 /* Transform.swift in Sources */,
+				4911677D266373B3007C7BF5 /* System.swift in Sources */,
 				4993AED6265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF09265D6F8800B00EFB /* Forward.swift in Sources */,
+				4911676E266373B3007C7BF5 /* Scene.swift in Sources */,
+				4911678C266373B3007C7BF5 /* ComponentStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,27 +509,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4993AEEC265C74B400B00EFB /* GPUMetal.swift in Sources */,
+				49EECE612666E4100055E6B8 /* GPUMetal.swift in Sources */,
 				49B9FCFF2654587D00D86C34 /* App.swift in Sources */,
 				4983897E2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */,
-				4993AEE9265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED4265ACDE900B00EFB /* MeshResource.swift in Sources */,
+				49116790266373B3007C7BF5 /* ComponentIteration.swift in Sources */,
+				49116781266373B3007C7BF5 /* Component.swift in Sources */,
+				49116775266373B3007C7BF5 /* PerspectiveCamera.swift in Sources */,
 				49B9FD03265458A600D86C34 /* MSDView.swift in Sources */,
+				491167592663732E007C7BF5 /* GPU.swift in Sources */,
 				4993AEF1265C793300B00EFB /* Resources.swift in Sources */,
+				49FD323226632B3D007D19EF /* RenderSystem.swift in Sources */,
+				49116793266373B3007C7BF5 /* Extras.swift in Sources */,
+				49EECE5E2664D8A00055E6B8 /* RendererGeneric.swift in Sources */,
+				49116784266373B3007C7BF5 /* Resource.swift in Sources */,
 				4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */,
+				4911677B266373B3007C7BF5 /* Hierarchy.swift in Sources */,
+				4911678A266373B3007C7BF5 /* Sparse.swift in Sources */,
+				49116772266373B3007C7BF5 /* Entity.swift in Sources */,
+				49116778266373B3007C7BF5 /* Transform.swift in Sources */,
+				4911677E266373B3007C7BF5 /* System.swift in Sources */,
 				4993AED7265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */,
+				4911676F266373B3007C7BF5 /* Scene.swift in Sources */,
+				4911678D266373B3007C7BF5 /* ComponentStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4993AEFF265C7BA500B00EFB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 4993AEFE265C7BA500B00EFB /* MSD */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		49FA475B261D8022003C3F8E /* Debug */ = {
@@ -684,17 +824,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4993AEFC265C7B2B00B00EFB /* MSD */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MSD;
-		};
-		4993AEFE265C7BA500B00EFB /* MSD */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MSD;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 49FA4714261D8020003C3F8E /* Project object */;
 }
