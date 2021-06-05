@@ -52,12 +52,14 @@ class RendererGeneric<GPU: GPUAPI> {
     
     var rotation: Float = 0
     
-    
     init(swapChain: GPU.SwapChain) throws {
         self.device = swapChain.device
         guard let queue = self.device.makeCommandQueue() else { throw Failure.unexpectedMetalError }
         self.commandQueue = queue
-        
+
+        // configure swap chain?
+        swapChain.configuration = .init(format: .bgra8Unorm_srgb, depthStencilFormat: .depth32Float_stencil8, sampleCount: 1)
+
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
         
         guard let buffer = self.device.makeBuffer(length:uniformBufferSize, storageMode: .shared)
@@ -71,10 +73,6 @@ class RendererGeneric<GPU: GPUAPI> {
 
         uniforms = dataPtr.bindMemory(to:Uniforms.self, capacity:1)
 
-        // TODO: configure swap chain?
-        //        metalKitView.depthStencilPixelFormat = GPUPixelFormat.depth32Float_stencil8
-        //        metalKitView.colorPixelFormat = MTLPixelFormat.bgra8Unorm_srgb
-        //        metalKitView.sampleCount = 1
         
         let mtlVertexDescriptor = Self.buildMetalVertexDescriptor()
         
@@ -116,13 +114,15 @@ class RendererGeneric<GPU: GPUAPI> {
                 VertexSemantic.position.rawValue:
                     .init(format: .float3,
                           offset: 0,
-                          bufferIndex: BufferIndex.meshPositions.rawValue
+                          bufferIndex: BufferIndex.meshPositions.rawValue,
+                          semantic: VertexSemantic.position
                     ),
 
                 VertexSemantic.texcoord0.rawValue:
                     .init(format: .float2,
                           offset: 0,
-                          bufferIndex: BufferIndex.meshGenerics.rawValue
+                          bufferIndex: BufferIndex.meshGenerics.rawValue,
+                          semantic: VertexSemantic.texcoord0
                     ),
 
             ],
@@ -162,51 +162,34 @@ class RendererGeneric<GPU: GPUAPI> {
             vertexFunction: vertexFunction,
             fragmentFunction: fragmentFunction,
             sampleCount: config.sampleCount,
-            descriptor: mtlVertexDescriptor,
+            vertexDescriptor: mtlVertexDescriptor,
             colorAttachments: [
                 .init(pixelFormat: config.format)
             ],
             depthAttachmentPixelFormat: config.depthStencilFormat,
             stencilAttachmentPixelFormat: config.depthStencilFormat
         )
-            
-//            MTLRenderPipelineDescriptor()
-//        pipelineDescriptor.label = "RenderPipeline"
-//        pipelineDescriptor.sampleCount = metalKitView.sampleCount
-//        pipelineDescriptor.vertexFunction = vertexFunction
-//        pipelineDescriptor.fragmentFunction = fragmentFunction
-//        pipelineDescriptor.vertexDescriptor = mtlVertexDescriptor
-        
-//        pipelineDescriptor.colorAttachments[0].pixelFormat = metalKitView.colorPixelFormat
-//        pipelineDescriptor.depthAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
-//        pipelineDescriptor.stencilAttachmentPixelFormat = metalKitView.depthStencilPixelFormat
-        
+
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
     
     class func buildMesh(device: GPU.Device,
                          vertexDescriptor: GPUVertexDescriptor) throws -> GPU.MeshRuntimeType
-    where GPU.MeshBufferAllocator : MDLMeshBufferAllocator
     {
         /// Create and condition mesh data to feed into a pipeline using the given vertex descriptor
         
         let allocator = GPU.MeshBufferAllocator(device: device)
         
-        let mdlMesh = MDLMesh.newBox(withDimensions: SIMD3<Float>(4, 4, 4),
-                                     segments: SIMD3<UInt32>(2, 2, 2),
-                                     geometryType: MDLGeometryType.triangles,
-                                     inwardNormals: false,
-                                     allocator: allocator)
+        let mesh =
+            GPU.GeometricMeshUtils.newBox(
+                withDimensions: SIMD3<Float>(4, 4, 4),
+                segments: SIMD3<UInt32>(2, 2, 2),
+//                geometryType: MDLGeometryType.triangles,
+                inwardNormals: false,
+                allocator: allocator)
         
-        return try device.prepareMesh(mesh: mdlMesh, vertexDescriptor: buildMetalVertexDescriptor())
+        return try device.prepareMesh(mesh: mesh, vertexDescriptor: buildMetalVertexDescriptor())
     }
-    
-    class func buildMesh(device: GPU.Device,
-                         vertexDescriptor: GPUVertexDescriptor) throws -> GPU.MeshRuntimeType
-    {
-        fatalError("Must use other override")
-    }
-
     
     class func loadTexture(device: GPU.Device,
                            textureName: String) throws -> GPU.Texture {
@@ -214,10 +197,7 @@ class RendererGeneric<GPU: GPUAPI> {
         
         let textureLoader = GPU.TextureLoader(device: device)
         
-        guard let url = Bundle(for: Self.self).url(forResource: textureName, withExtension: nil)
-        else { throw Failure.resourceNotFound(name: textureName) }
-        
-        return try textureLoader.makeTexture(url: url, options: .init(generateMipMaps: false))
+        return try textureLoader.makeTexture(named: textureName, options: .init(generateMipMaps: true))
     }
     
     private func updateDynamicBufferState() {
@@ -264,16 +244,52 @@ class RendererGeneric<GPU: GPUAPI> {
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
             let renderPassDescriptor = view.currentRenderPassDescriptor
             
-            if let renderPassDescriptor = renderPassDescriptor {
+            if let renderPassDescriptor = renderPassDescriptor, var renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
                 
-                //commandBuffer.draw(mesh: mesh, pass: renderPassDescriptor)
+                /// Final pass rendering code here
+                renderEncoder.label = "Primary Render Encoder"
                 
+                renderEncoder.pushDebugGroup("Draw Box")
+                
+                renderEncoder.setCullMode(.back)
+                
+                renderEncoder.setFrontFacing(.counterClockwise)
+                
+                renderEncoder.setRenderPipelineState(pipelineState)
+                
+                renderEncoder.setDepthStencilState(depthState)
+                
+                renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: BufferIndex.uniforms.rawValue)
+                
+                // Layouts describe each vertex buffer in use
+                for (index, layout) in mesh.vertexDescriptor.layouts {
+                    if layout.stride != 0 {
+                        let buffer = mesh.vertexBuffers[index]
+                        renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                    }
+                }
+                
+                renderEncoder.setFragmentTexture(colorMap, index: TextureIndex.color.rawValue)
+                
+                for submesh in mesh.submeshes {
+                    renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                        indexCount: submesh.indexCount,
+                                                        indexType: submesh.indexType,
+                                                        indexBuffer: submesh.indexBuffer.buffer,
+                                                        indexBufferOffset: submesh.indexBuffer.offset)
+                    
+                }
+                
+                renderEncoder.popDebugGroup()
+                
+                renderEncoder.endEncoding()
                 
                 if let drawable = view.currentDrawable {
                     commandBuffer.present(drawable)
                 }
             }
-            
+
             commandBuffer.commit()
         }
     }

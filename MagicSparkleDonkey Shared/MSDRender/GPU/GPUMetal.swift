@@ -56,8 +56,11 @@ class GPUMetal : GPUAPI {
         let state: MTLDepthStencilState
     }
     
-    struct SwapChain {
+    class SwapChain {
         let view: MTKView
+        init(view: MTKView) {
+            self.view = view
+        }
     }
     
     struct RenderPipelineState {
@@ -125,13 +128,18 @@ class GPUMetal : GPUAPI {
     
     // Load the given mesh into GPU buffers that match vertexDescriptor
     func prepareMesh<T: GPUMeshInput>(mesh: T, vertexDescriptor: GPUVertexDescriptor) throws -> MeshRuntimeType {
-        fatalError("Must call the overload of this.")
+        if T.self == MDLMesh.self {
+            return try prepareMesh(mesh: mesh as! MDLMesh, vertexDescriptor: vertexDescriptor)
+        } else {
+            throw Failure.unknownMeshInputType
+        }
     }
 
     func prepareMesh(mesh: MDLMesh, vertexDescriptor: GPUVertexDescriptor) throws -> MeshRuntimeType {
-        let m = mesh.copy() as! MDLMesh
+        // Copy because we're changing vertex descriptor
+        let m = MDLMesh(vertexBuffers: mesh.vertexBuffers, vertexCount: mesh.vertexCount, descriptor: mesh.vertexDescriptor, submeshes: mesh.submeshes as! [MDLSubmesh])
         m.vertexDescriptor = MDLVertexDescriptor(vertexDescriptor)
-        let mtkMesh = try MTKMesh(mesh: mesh, device: device)
+        let mtkMesh = try MTKMesh(mesh: m, device: device)
         return .init(mesh: mtkMesh, vertexDescriptor: vertexDescriptor)
     }
 
@@ -143,20 +151,62 @@ class GPUMetal : GPUAPI {
     
     func makeRenderPipelineState(descriptor: GPURenderPipelineDescriptor<Function>) throws -> RenderPipelineState {
         let pipe = MTLRenderPipelineDescriptor()
+        pipe.label = descriptor.label
+        pipe.sampleCount = descriptor.sampleCount
+        pipe.vertexFunction = descriptor.vertexFunction.function
+        pipe.fragmentFunction = descriptor.fragmentFunction.function
+        if let vertexDescriptor = descriptor.vertexDescriptor {
+            pipe.vertexDescriptor = MTLVertexDescriptor(vertexDescriptor)
+        }
         for (i, attachment) in descriptor.colorAttachments.enumerated() {
             guard let mtlFormat = MTLPixelFormat(attachment.pixelFormat)
             else { throw Failure.unsupportedPixelFormat }
             pipe.colorAttachments[i].pixelFormat = mtlFormat
         }
-        pipe.vertexFunction = descriptor.vertexFunction.function
-        pipe.fragmentFunction = descriptor.fragmentFunction.function
+        if let depthFormat = descriptor.depthAttachmentPixelFormat.flatMap(MTLPixelFormat.init) {
+            pipe.depthAttachmentPixelFormat = depthFormat
+        }
+        if let stencilFormat = descriptor.stencilAttachmentPixelFormat.flatMap(MTLPixelFormat.init) {
+            pipe.stencilAttachmentPixelFormat = stencilFormat
+        }
+        
         return RenderPipelineState(state: try device.makeRenderPipelineState(descriptor: pipe))
     }
     
+    struct GeometricMeshUtils {
+        
+    }
 
 }
 
+extension MTLVertexDescriptor {
+    convenience init(_ vertexDescriptor: GPUVertexDescriptor) {
+        self.init()
+        
+        vertexDescriptor.layouts.forEach{ index, layout in
+            layouts[index].stride = layout.stride
+        }
+        
+        vertexDescriptor.attributes.forEach{ index, attribute in
+            let a = attributes[index]!
+            a.bufferIndex = attribute.bufferIndex
+            a.format = MTLVertexFormat(attribute.format)
+            a.offset = attribute.offset
+        }
+
+    }
+}
+
 extension MDLVertexFormat {
+    init(_ ours: GPUVertexFormat) {
+        switch ours {
+        case .float2: self = .float2
+        case .float3: self = .float3
+        }
+    }
+}
+
+extension MTLVertexFormat {
     init(_ ours: GPUVertexFormat) {
         switch ours {
         case .float2: self = .float2
@@ -176,9 +226,33 @@ extension MDLVertexDescriptor {
         layouts = NSMutableArray(array: l)
 
         let v = vertexDescriptor.attributes.map { index, attribute in
-            MDLVertexAttribute(name: "", format: MDLVertexFormat(attribute.format), offset: attribute.offset, bufferIndex: attribute.bufferIndex)
+            MDLVertexAttribute(name: attribute.semantic.mdlAttributeName!, format: MDLVertexFormat(attribute.format), offset: attribute.offset, bufferIndex: attribute.bufferIndex)
         }
         attributes = NSMutableArray(array: v)
+    }
+}
+
+// TODO: move this out of GPU abstraction!
+extension VertexSemantic {
+    var mdlAttributeName: String? {
+        switch self {
+        case .position:
+            return MDLVertexAttributePosition
+        case .normal:
+            return MDLVertexAttributeNormal
+        case .tangent:
+            return MDLVertexAttributeTangent
+        case .color:
+            return MDLVertexAttributeColor
+        case .boneIndices:
+            return MDLVertexAttributeJointIndices
+        case .boneWeights:
+            return MDLVertexAttributeJointWeights
+        case .texcoord0, .texcoord1, .texcoord2, .texcoord3, .texcoord4, .texcoord5, .texcoord6, .texcoord7:
+            return MDLVertexAttributeTextureCoordinate
+        @unknown default:
+            return nil
+        }
     }
 }
 
@@ -186,6 +260,7 @@ extension GPUPixelFormat {
     init?(_ mtlFormat: MTLPixelFormat) {
         switch mtlFormat {
         case .depth32Float_stencil8: self = .depth32Float_stencil8
+        case .bgra8Unorm_srgb: self = .bgra8Unorm_srgb
         case .rgba16Float: self = .rgba16Float
         default: return nil
         }
@@ -196,8 +271,8 @@ extension MTLPixelFormat {
     init?(_ format: GPUPixelFormat) {
         switch format {
         case .depth32Float_stencil8: self = .depth32Float_stencil8
-        default:
-            return nil
+        case .bgra8Unorm_srgb: self = .bgra8Unorm_srgb
+        case .rgba16Float: self = .rgba16Float
         }
     }
 }
@@ -220,8 +295,6 @@ extension MTLCullMode {
         case .front: self = .front
         case .back: self = .back
         case .none: self = .none
-        @unknown default:
-            return nil
         }
     }
 }
@@ -232,6 +305,8 @@ extension GPUWindingMode {
         switch winding {
         case .clockwise: self = .clockwise
         case .counterClockwise: self = .counterClockwise
+        @unknown default:
+            fatalError("Unexpected winding mode \(winding)")
         }
     }
 }
@@ -322,6 +397,8 @@ extension GPUMetal.SwapChain : GPUSwapChain {
         }
         set {
             view.colorPixelFormat = MTLPixelFormat(newValue.format)!
+            view.depthStencilPixelFormat = MTLPixelFormat(newValue.depthStencilFormat)!
+            view.sampleCount = newValue.sampleCount
         }
     }
     
@@ -425,6 +502,14 @@ extension GPUMetal.RenderEncoder : GPURenderEncoder {
 
     func setFragmentBuffer(_ buffer: GPUMetal.Buffer, offset: Int, index: Int) {
         encoder.setFragmentBuffer(buffer.buffer, offset: offset, index: index)
+    }
+
+    func setVertexTexture(_ texture: GPUMetal.Texture?, index: Int) {
+        encoder.setVertexTexture(texture?.texture, index: index)
+    }
+
+    func setFragmentTexture(_ texture: GPUMetal.Texture?, index: Int) {
+        encoder.setFragmentTexture(texture?.texture, index: index)
     }
 
     func drawIndexedPrimitives(type primitiveType: GPUPrimitiveType, indexCount: Int, indexType: GPUIndexType, indexBuffer: Buffer, indexBufferOffset: Int) {
@@ -570,6 +655,20 @@ extension GPUMetal.MeshBuffer : GPUMeshBuffer {
 
 extension MDLMesh : GPUMeshInput {}
 
+// Provide mesh creation utils
+extension GPUMetal.GeometricMeshUtils: GPUGeometricMeshUtils {
+    typealias MeshRuntimeType = GPUMetal.MeshRuntimeType
+    typealias MeshBufferAllocator = GPUMetal.MeshBufferAllocator
+    typealias MeshTemporaryType = MDLMesh
+    
+    static func newBox(withDimensions dimensions: vector_float3, segments: vector_uint3, inwardNormals: Bool, allocator: GPUMetal.MeshBufferAllocator?) -> MDLMesh {
+        MDLMesh.newBox(withDimensions: dimensions, segments: segments, geometryType: MDLGeometryType.triangles, inwardNormals: inwardNormals, allocator: allocator)
+    }
+
+}
+
+
+
 extension Dictionary where Key == MTKTextureLoader.Option, Value == Any {
     init(_ options: GPUTextureLoadingOptions) {
         if options.generateMipMaps {
@@ -586,6 +685,11 @@ extension GPUMetal.TextureLoader : GPUTextureLoader {
 
     func makeTexture(url: URL, options: GPUTextureLoadingOptions) throws -> GPUMetal.Texture {
         let mtlTexture = try self.newTexture(URL: url, options: .init(options))
+        return Texture(texture: mtlTexture)
+    }
+    
+    func makeTexture(named name: String, options: GPUTextureLoadingOptions) throws -> Texture {
+        let mtlTexture = try self.newTexture(name: name, scaleFactor: 1.0, bundle: nil, options: .init(options))
         return Texture(texture: mtlTexture)
     }
     

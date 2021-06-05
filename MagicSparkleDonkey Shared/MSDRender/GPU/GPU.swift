@@ -5,6 +5,7 @@ import Foundation
 enum GPUFailure : Error {
     case shaderCompilation
     case unsupportedPixelFormat
+    case unknownMeshInputType
 }
 
 enum GPUStorageMode: Int {
@@ -51,7 +52,7 @@ struct GPURenderPipelineDescriptor<Function: GPUFunction> {
     let vertexFunction: Function
     let fragmentFunction: Function
     let sampleCount: Int
-    let descriptor: GPUVertexDescriptor?
+    let vertexDescriptor: GPUVertexDescriptor?
     struct ColorAttachment {
         let pixelFormat: GPUPixelFormat
     }
@@ -66,6 +67,9 @@ struct GPUVertexDescriptor {
         let format: GPUVertexFormat
         let offset: Int
         let bufferIndex: Int
+        // This helps the Model loader associate the right data to what the GPU needs.
+        // Technically, this is not part of the GPU api and should be clarified
+        let semantic: VertexSemantic
     }
     
     struct VertexBufferLayoutDescriptor {
@@ -77,6 +81,7 @@ struct GPUVertexDescriptor {
 }
 
 enum GPUPixelFormat: UInt32, CaseIterable {
+    case bgra8Unorm_srgb
     case depth32Float_stencil8
     case rgba16Float
 }
@@ -138,7 +143,8 @@ protocol GPUAPI {
     associatedtype RenderEncoder: GPURenderEncoder & GPUDebugLabeled & GPUDebugGrouped where
         RenderEncoder.DepthStencilState == Self.DepthStencilState,
         RenderEncoder.RenderPipelineState == Self.RenderPipelineState,
-        RenderEncoder.Buffer == Self.Buffer
+        RenderEncoder.Buffer == Self.Buffer,
+        RenderEncoder.Texture == Self.Texture
     
     func makeCommandQueue() -> CommandQueue?
 
@@ -164,6 +170,11 @@ protocol GPUAPI {
         MeshIndexBuffer.Buffer == Self.Buffer
     associatedtype MeshBuffer: GPUMeshBuffer where
         MeshBuffer.Buffer == Self.Buffer
+    associatedtype GeometricMeshUtils: GPUGeometricMeshUtils where
+        GeometricMeshUtils.MeshRuntimeType == Self.MeshRuntimeType,
+        GeometricMeshUtils.MeshBufferAllocator == Self.MeshBufferAllocator,
+        GeometricMeshUtils.MeshTemporaryType: GPUMeshInput
+    
 
     // Mesh type as loaded from resources / filesystem. Could be ModelIO, custom format, etc
     func prepareMesh<T: GPUMeshInput>(mesh: T, vertexDescriptor: GPUVertexDescriptor) throws -> MeshRuntimeType
@@ -174,6 +185,13 @@ protocol GPUAPI {
 
 protocol GPUMeshInput {
     
+}
+
+protocol GPUGeometricMeshUtils {
+    associatedtype MeshRuntimeType
+    associatedtype MeshBufferAllocator
+    associatedtype MeshTemporaryType
+    static func newBox(withDimensions dimensions: vector_float3, segments: vector_uint3, inwardNormals: Bool, allocator: MeshBufferAllocator?) -> MeshTemporaryType
 }
 
 protocol GPUDebugLabeled {
@@ -187,7 +205,7 @@ protocol GPUDebugGrouped {
 
 protocol GPUDrawable {}
 
-protocol GPUSwapChain {
+protocol GPUSwapChain: AnyObject {
     associatedtype Device
     associatedtype RenderPassDescriptor
     associatedtype Drawable
@@ -242,6 +260,9 @@ protocol GPURenderEncoder : GPUCommandEncoder {
     
     func setVertexBuffer(_ buffer: Buffer, offset: Int, index: Int)
     func setFragmentBuffer(_ buffer: Buffer, offset: Int, index: Int)
+    
+    func setVertexTexture(_ texture: Texture?, index: Int)
+    func setFragmentTexture(_ texture: Texture?, index: Int)
 
     func drawIndexedPrimitives(type primitiveType: GPUPrimitiveType, indexCount: Int, indexType: GPUIndexType, indexBuffer: Buffer, indexBufferOffset: Int)
 
@@ -308,6 +329,8 @@ protocol GPUTextureLoader {
     init(device: Device)
     
     func makeTexture(url: URL, options: GPUTextureLoadingOptions) throws -> Texture
+    // TODO: abstract how resources are referred to in the bundle? ie resolve "/Resources/X/Y.png" to a URL or bundle resource
+    func makeTexture(named: String, options: GPUTextureLoadingOptions) throws -> Texture
 }
 
 protocol GPUMeshBufferAllocator {

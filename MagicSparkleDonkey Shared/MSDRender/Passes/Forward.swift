@@ -47,13 +47,15 @@ struct ForwardPass<GPU: GPUAPI> : Pass {
                 VertexSemantic.position.rawValue:
                     .init(format: .float3,
                           offset: 0,
-                          bufferIndex: BufferIndex.meshPositions.rawValue
+                          bufferIndex: BufferIndex.meshPositions.rawValue,
+                          semantic: VertexSemantic.position
                     ),
 
                 VertexSemantic.texcoord0.rawValue:
                     .init(format: .float2,
                           offset: 0,
-                          bufferIndex: BufferIndex.meshGenerics.rawValue
+                          bufferIndex: BufferIndex.meshGenerics.rawValue,
+                          semantic: VertexSemantic.texcoord0
                     ),
 
             ],
@@ -112,7 +114,7 @@ struct ForwardPass<GPU: GPUAPI> : Pass {
         
         let pipeline: GPU.RenderPipelineState
         do {
-            pipeline = try device.makeRenderPipelineState(descriptor: GPURenderPipelineDescriptor<GPU.Function>(label: "Render", vertexFunction: vertexFunction, fragmentFunction: fragmentFunction, sampleCount: 1, descriptor: Self.vertexDescriptor0, colorAttachments: [.init(pixelFormat: outputColorFormat)], depthAttachmentPixelFormat: outputDepthFormat, stencilAttachmentPixelFormat: outputDepthFormat))
+            pipeline = try device.makeRenderPipelineState(descriptor: GPURenderPipelineDescriptor<GPU.Function>(label: "Render", vertexFunction: vertexFunction, fragmentFunction: fragmentFunction, sampleCount: 1, vertexDescriptor: Self.vertexDescriptor0, colorAttachments: [.init(pixelFormat: outputColorFormat)], depthAttachmentPixelFormat: outputDepthFormat, stencilAttachmentPixelFormat: outputDepthFormat))
         } catch {
             throw Failure.gpuInvalidConfiguration(underlying: error)
         }

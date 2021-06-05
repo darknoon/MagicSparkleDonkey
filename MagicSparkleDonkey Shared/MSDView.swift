@@ -22,16 +22,16 @@ struct MSDView : PlatformViewRepresentable {
     
     // Renderer and scene initialized when we are actually making the view
     class Coordinator: NSObject, MTKViewDelegate {
-        var renderer: RendererMetal? = nil
+        var renderer: RendererGeneric<GPUMetal>? = nil
         var scene = Scene()
         var currentError: Error? = nil
 
         func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-            renderer?.mtkView(view, drawableSizeWillChange: size)
+            renderer?.mtkView(GPUMetal.SwapChain(view: view), drawableSizeWillChange: size)
         }
         
         func draw(in view: MTKView) {
-            renderer?.draw(in: view)
+            renderer?.draw(in: GPUMetal.SwapChain(view: view))
         }
     }
 
@@ -44,7 +44,7 @@ struct MSDView : PlatformViewRepresentable {
     func makeView(context: Context) -> MTKView {
         let v = MTKView(frame: .zero, device: device)
         do {
-            let r = try RendererMetal(metalKitView: v)
+            let r = try RendererGeneric<GPUMetal>(swapChain: GPUMetal.SwapChain(view: v))
             context.coordinator.renderer = r
             v.delegate = context.coordinator
         } catch {
