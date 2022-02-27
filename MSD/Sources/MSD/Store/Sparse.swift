@@ -7,8 +7,11 @@
 
 import Foundation
 
+struct Nothing: Equatable {
+    
+}
 
-typealias SparseIntSet = SparseArrayPaged<Void>
+typealias SparseIntSet = SparseArrayPaged<Nothing>
 
 // Based on sparse arrays in EnTT, and reference from fireblade-ecs swift
 // https://research.swtch.com/sparse
@@ -16,7 +19,9 @@ typealias SparseIntSet = SparseArrayPaged<Void>
 // (ie at least n / pageSize) memory will be consumed where n = maximum index used
 @usableFromInline struct SparseArrayPaged<Element> {
     @usableFromInline
-    typealias Index = Array<Element>.Index
+    typealias Index = Int
+    // We  can store indices more compactly than Int, though we want to deal in Int  for convenience. If only 2^16 entries are required, could use UInt16
+    typealias StoredIndex = UInt32
     typealias Key = Int
     typealias DenseElement = (index: Index, element: Element)
     
@@ -115,6 +120,7 @@ extension SparseArrayPaged : RandomAccessCollection {
                 return
             }
             
+            // Do the checks to make sure the value we get from sparse still corresponds with what's in dense
             if let denseIndex = sparse[index],
                (0..<dense.count).contains(denseIndex),
                dense[denseIndex].index == index {
@@ -177,10 +183,10 @@ extension SparseArrayPaged {
                 // Does this offer a speedup?
                 // guard sparsePage.header.used > 0 else { return false}
 
-                let buf = sparsePage.withUnsafeMutablePointerToElements{
-                    UnsafeBufferPointer(start: $0, count: Self.elementsPerPage)
+                return sparsePage.withUnsafeMutablePointerToElements{ ptr in
+                    let buf = UnsafeBufferPointer(start: ptr, count: Self.elementsPerPage)
+                    return buf[offset]
                 }
-                return buf[offset]
             }
             // sparse[idx] = nil ->
             set {
@@ -188,10 +194,11 @@ extension SparseArrayPaged {
                 guard let newValue = newValue else { abort() }
 
                 let (page, offset) = page(for: index)
-                assure(page: page).withUnsafeMutablePointers{
-                    $0.pointee.used += 1
+                assure(page: page).withUnsafeMutablePointers{ header, elements in
+                    header.pointee.used += 1
+                    let buf = UnsafeMutableBufferPointer(start: elements, count: Self.elementsPerPage)
                     // Make sparse[e] point to the index in dense of e
-                    ($1 + offset).pointee = newValue
+                    buf[offset] = newValue
                 }
 
             }
@@ -210,7 +217,6 @@ extension SparseArrayPaged {
             } else {
                 // We need to grow the page array.
                 // Is this the optimal way in swift?
-                storage.reserveCapacity(page + 1)
                 storage.append(contentsOf: Array(repeating: nil, count: page - pageCapacity + 1))
                 realPage = Self.makePage()
                 storage[page] = realPage
@@ -277,10 +283,37 @@ extension ManagedBuffer {
     }
 }
 
-extension SparseArrayPaged where Element == Void {
+extension SparseArrayPaged: Equatable where Element : Equatable {
+
+    @usableFromInline
+    static func == (lhs: SparseArrayPaged<Element>, rhs: SparseArrayPaged<Element>) -> Bool {
+        // 1st check both have same pages
+        guard lhs.activePageCount == rhs.activePageCount else { return false }
+        
+        // Now check that they both have the same dense elements, though they don't have to be in the same ordere
+        for (idx, l) in lhs.dense {
+            let r = rhs[idx]
+            if r != l {
+                return false
+            }
+        }
+
+        for (idx, r) in rhs.dense {
+            let l = lhs[idx]
+            if l != r {
+                return false
+            }
+        }
+
+        return true
+    }
+    
+}
+
+extension SparseArrayPaged where Element == Nothing {
     
     mutating func insert(_ e: Index) {
-        self[e] = Void()
+        self[e] = Nothing()
     }
     
     mutating func remove(_ idx: Index) {

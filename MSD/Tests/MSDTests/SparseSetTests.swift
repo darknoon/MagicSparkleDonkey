@@ -27,9 +27,23 @@ class SparseSetTests_macOS: XCTestCase {
     func testAddRemove() {
         var set: SparseIntSet = [0, 1, 3, 4]
         
+        // Should do nothing
         set.remove(2)
-        
+        XCTAssertEqual(set.count, 4)
         XCTAssertEqual(Set(set.map{$0}), Set([0,1,3,4]))
+
+        // Should remove 1
+        set.remove(1)
+        XCTAssertEqual(set.count, 3)
+        XCTAssertEqual(Set(set.map{$0}), Set([0,3,4]))
+
+    }
+    
+    func testEquality() {
+        let a: SparseIntSet = [0, 1, 3, 4]
+        let b: SparseIntSet = [4, 3, 1, 0]
+
+        XCTAssertEqual(a, b)
     }
     
     func testAddSecondPage() {
@@ -83,6 +97,29 @@ class SparseSetTests_macOS: XCTestCase {
                 set.remove(j)
             }
         }
+    }
+    
+    func testDeallocatePages() {
+        var set = SparseIntSet()
+        
+        let page = 511
+        
+        set.insert(12)
+        set.insert(12 + page)
+        set.insert(12 + 2 * page)
+        
+        
+        XCTAssertEqual(set.count, 3)
+        XCTAssertEqual(set.activePageCount, 3)
+        
+        set.remove(12)
+        XCTAssertEqual(set.activePageCount, 2)
+
+        set.remove(12 + 2 * page)
+        XCTAssertEqual(set.activePageCount, 1)
+
+        set.remove(12 + page)
+        XCTAssertEqual(set.activePageCount, 0)
     }
 
 }
