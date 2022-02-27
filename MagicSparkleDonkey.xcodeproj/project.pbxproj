@@ -38,6 +38,9 @@
 		49B9FD01265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD02265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
 		49B9FD03265458A600D86C34 /* MSDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FD00265458A600D86C34 /* MSDView.swift */; };
+		49BB353927CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
+		49BB353A27CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
+		49BB353B27CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
 		49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
@@ -58,6 +61,7 @@
 		4993AF07265D6F8800B00EFB /* Forward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forward.swift; sourceTree = "<group>"; };
 		49B9FCFC2654587D00D86C34 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		49B9FD00265458A600D86C34 /* MSDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDView.swift; sourceTree = "<group>"; };
+		49BB353827CBB25000508761 /* GPUBufferQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPUBufferQueue.swift; sourceTree = "<group>"; };
 		49FA471C261D8022003C3F8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicSparkleDonkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FA472E261D8022003C3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -105,12 +109,12 @@
 		4993AECD265ACDE900B00EFB /* MSDRender */ = {
 			isa = PBXGroup;
 			children = (
+				49BB353727CBB23000508761 /* Render */,
 				4993AF06265D6F7300B00EFB /* Passes */,
 				4993AED0265ACDE900B00EFB /* ShaderTypes.h */,
 				4993AEE4265C74B400B00EFB /* GPU */,
 				4993AECE265ACDE900B00EFB /* MeshResource.swift */,
 				4993AECF265ACDE900B00EFB /* Shaders.metal */,
-				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
 			);
 			path = MSDRender;
 			sourceTree = "<group>";
@@ -145,6 +149,15 @@
 				4993AF07265D6F8800B00EFB /* Forward.swift */,
 			);
 			path = Passes;
+			sourceTree = "<group>";
+		};
+		49BB353727CBB23000508761 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
+				49BB353827CBB25000508761 /* GPUBufferQueue.swift */,
+			);
+			path = Render;
 			sourceTree = "<group>";
 		};
 		49FA4713261D8020003C3F8E = {
@@ -352,6 +365,7 @@
 				4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED5265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF08265D6F8800B00EFB /* Forward.swift in Sources */,
+				49BB353927CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +383,7 @@
 				4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED6265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF09265D6F8800B00EFB /* Forward.swift in Sources */,
+				49BB353A27CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,6 +401,7 @@
 				4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED7265ACDE900B00EFB /* Shaders.metal in Sources */,
 				4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */,
+				49BB353B27CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
