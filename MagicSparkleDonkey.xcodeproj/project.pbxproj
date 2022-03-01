@@ -41,6 +41,15 @@
 		49BB353927CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
 		49BB353A27CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
 		49BB353B27CBB25000508761 /* GPUBufferQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353827CBB25000508761 /* GPUBufferQueue.swift */; };
+		49BB353D27CC5D8100508761 /* MeshRenderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353C27CC5D8100508761 /* MeshRenderState.swift */; };
+		49BB353E27CC5D8100508761 /* MeshRenderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353C27CC5D8100508761 /* MeshRenderState.swift */; };
+		49BB353F27CC5D8100508761 /* MeshRenderState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB353C27CC5D8100508761 /* MeshRenderState.swift */; };
+		49BB354127CC5EA100508761 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB354027CC5EA100508761 /* ResourceManager.swift */; };
+		49BB354227CC5EA100508761 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB354027CC5EA100508761 /* ResourceManager.swift */; };
+		49BB354327CC5EA100508761 /* ResourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49BB354027CC5EA100508761 /* ResourceManager.swift */; };
+		49BB354427CE5E5A00508761 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 4993AF02265CC50800B00EFB /* Assets */; };
+		49BB354527CE5E5A00508761 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 4993AF02265CC50800B00EFB /* Assets */; };
+		49BB354627CE5E5B00508761 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 4993AF02265CC50800B00EFB /* Assets */; };
 		49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
 		49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 49FA471C261D8022003C3F8E /* Assets.xcassets */; };
@@ -57,11 +66,13 @@
 		4993AEE6265C74B400B00EFB /* GPUMetal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPUMetal.swift; sourceTree = "<group>"; };
 		4993AEEE265C793300B00EFB /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		4993AEF2265C798C00B00EFB /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
-		4993AF02265CC50800B00EFB /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		4993AF02265CC50800B00EFB /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		4993AF07265D6F8800B00EFB /* Forward.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forward.swift; sourceTree = "<group>"; };
 		49B9FCFC2654587D00D86C34 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		49B9FD00265458A600D86C34 /* MSDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDView.swift; sourceTree = "<group>"; };
 		49BB353827CBB25000508761 /* GPUBufferQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPUBufferQueue.swift; sourceTree = "<group>"; };
+		49BB353C27CC5D8100508761 /* MeshRenderState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshRenderState.swift; sourceTree = "<group>"; };
+		49BB354027CC5EA100508761 /* ResourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceManager.swift; sourceTree = "<group>"; };
 		49FA471C261D8022003C3F8E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MagicSparkleDonkey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FA472E261D8022003C3F8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -156,6 +167,8 @@
 			children = (
 				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
 				49BB353827CBB25000508761 /* GPUBufferQueue.swift */,
+				49BB353C27CC5D8100508761 /* MeshRenderState.swift */,
+				49BB354027CC5EA100508761 /* ResourceManager.swift */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -168,7 +181,7 @@
 				49FA4723261D8022003C3F8E /* MagicSparkleDonkey iOS */,
 				49FA4734261D8022003C3F8E /* MagicSparkleDonkey tvOS */,
 				49FA4745261D8022003C3F8E /* MagicSparkleDonkey macOS */,
-				4993AF02265CC50800B00EFB /* Resources */,
+				4993AF02265CC50800B00EFB /* Assets */,
 				49FA4722261D8022003C3F8E /* Products */,
 				4993AEF3265C7A5100B00EFB /* Frameworks */,
 			);
@@ -328,6 +341,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BB354427CE5E5A00508761 /* Assets in Resources */,
 				49FA4758261D8022003C3F8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,6 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BB354527CE5E5A00508761 /* Assets in Resources */,
 				49FA4759261D8022003C3F8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +359,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49BB354627CE5E5B00508761 /* Assets in Resources */,
 				49FA475A261D8022003C3F8E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,9 +377,11 @@
 				4993AEE7265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED2265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD01265458A600D86C34 /* MSDView.swift in Sources */,
+				49BB353D27CC5D8100508761 /* MeshRenderState.swift in Sources */,
 				4993AEEF265C793300B00EFB /* Resources.swift in Sources */,
 				4993AED8265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED5265ACDE900B00EFB /* Shaders.metal in Sources */,
+				49BB354127CC5EA100508761 /* ResourceManager.swift in Sources */,
 				4993AF08265D6F8800B00EFB /* Forward.swift in Sources */,
 				49BB353927CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);
@@ -379,9 +397,11 @@
 				4993AEE8265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED3265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD02265458A600D86C34 /* MSDView.swift in Sources */,
+				49BB353E27CC5D8100508761 /* MeshRenderState.swift in Sources */,
 				4993AEF0265C793300B00EFB /* Resources.swift in Sources */,
 				4993AED9265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED6265ACDE900B00EFB /* Shaders.metal in Sources */,
+				49BB354227CC5EA100508761 /* ResourceManager.swift in Sources */,
 				4993AF09265D6F8800B00EFB /* Forward.swift in Sources */,
 				49BB353A27CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);
@@ -397,9 +417,11 @@
 				4993AEE9265C74B400B00EFB /* GPU.swift in Sources */,
 				4993AED4265ACDE900B00EFB /* MeshResource.swift in Sources */,
 				49B9FD03265458A600D86C34 /* MSDView.swift in Sources */,
+				49BB353F27CC5D8100508761 /* MeshRenderState.swift in Sources */,
 				4993AEF1265C793300B00EFB /* Resources.swift in Sources */,
 				4993AEDA265ACDE900B00EFB /* RendererMetal.swift in Sources */,
 				4993AED7265ACDE900B00EFB /* Shaders.metal in Sources */,
+				49BB354327CC5EA100508761 /* ResourceManager.swift in Sources */,
 				4993AF0A265D6F8800B00EFB /* Forward.swift in Sources */,
 				49BB353B27CBB25000508761 /* GPUBufferQueue.swift in Sources */,
 			);

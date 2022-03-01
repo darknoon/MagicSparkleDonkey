@@ -11,11 +11,11 @@ import MSD
 extension MSD.ResourceBundle {
     
     var cube: MeshResource {
-        MeshResource(id: 123, path: "Resources/Cube.obj")
+        MeshResource(id: 123, path: "Assets/Cube.obj")
     }
     
     var subdiv: MeshResource {
-        MeshResource(id: 124, path: "Resources/Subdiv.usdc")
+        MeshResource(id: 124, path: "Assets/Subdiv.usdc")
     }
     
 }

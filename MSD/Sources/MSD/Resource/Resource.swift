@@ -26,4 +26,5 @@ public protocol RuntimeResource {
 
 public struct ResourceBundle {
     let bundle: Bundle
+    public init(bundle: Bundle) { self.bundle = bundle }
 }
