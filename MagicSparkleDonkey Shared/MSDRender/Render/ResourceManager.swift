@@ -46,7 +46,7 @@ class ResourceManager {
             case .URL:
                 result[.diffuse] = .texture(from: p.urlValue!)
                 
-            case .string:
+            case .string where (p.stringValue?.count ?? 0) > 0:
                 result[.diffuse] = .textureName(name: p.stringValue!)
             default:
                 break

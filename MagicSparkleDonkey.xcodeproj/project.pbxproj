@@ -165,10 +165,10 @@
 		49BB353727CBB23000508761 /* Render */ = {
 			isa = PBXGroup;
 			children = (
-				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
 				49BB353827CBB25000508761 /* GPUBufferQueue.swift */,
 				49BB353C27CC5D8100508761 /* MeshRenderState.swift */,
 				49BB354027CC5EA100508761 /* ResourceManager.swift */,
+				4993AED1265ACDE900B00EFB /* RendererMetal.swift */,
 			);
 			path = Render;
 			sourceTree = "<group>";

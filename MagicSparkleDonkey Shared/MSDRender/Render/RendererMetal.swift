@@ -54,8 +54,9 @@ class RendererMetal: NSObject, MTKViewDelegate {
                 
         bufferAllocator = MTKMeshBufferAllocator(device: device)
         
-        let meshPath = MSD.ResourceBundle(bundle: .main).subdiv.path
-        let asset = MDLAsset(url: URL(fileURLWithPath: meshPath, relativeTo: Bundle.main.resourceURL), vertexDescriptor: nil, bufferAllocator: bufferAllocator)
+        let assetResource = MSD.ResourceBundle(bundle: .main).subdiv
+
+        let asset = MDLAsset(url: URL(fileURLWithPath: assetResource.path, relativeTo: Bundle.main.resourceURL), vertexDescriptor: nil, bufferAllocator: bufferAllocator)
         let meshes = asset.childObjects(of: MDLMesh.self) as! [MDLMesh]
         if let mesh = meshes.first {
             let inputs = MeshRenderState.Inputs(
@@ -67,7 +68,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
                                         resourceManager: resourceManager,
                                         for: device)
         } else {
-            throw RendererError.resourceNotFound(resource: meshPath)
+            throw RendererError.resourceNotFound(resource: assetResource.path)
         }
         
         super.init()
