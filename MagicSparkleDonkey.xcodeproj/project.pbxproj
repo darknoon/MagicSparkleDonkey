@@ -11,6 +11,8 @@
 		4983897D2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4983897E2658243A0046E96E /* PlatformViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983897B2658243A0046E96E /* PlatformViewRepresentable.swift */; };
 		4993AEFD265C7B2B00B00EFB /* MSD in Frameworks */ = {isa = PBXBuildFile; productRef = 4993AEFC265C7B2B00B00EFB /* MSD */; };
+		499BE839281C5BC1006C9FFE /* MSD in Frameworks */ = {isa = PBXBuildFile; productRef = 499BE838281C5BC1006C9FFE /* MSD */; };
+		499BE83B281C5BC4006C9FFE /* MSD in Frameworks */ = {isa = PBXBuildFile; productRef = 499BE83A281C5BC4006C9FFE /* MSD */; };
 		49B9FCFD2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
 		49B9FCFE2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
 		49B9FCFF2654587D00D86C34 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B9FCFC2654587D00D86C34 /* App.swift */; };
@@ -46,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				499BE83B281C5BC4006C9FFE /* MSD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				499BE839281C5BC1006C9FFE /* MSD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +163,7 @@
 			);
 			name = "MagicSparkleDonkey iOS";
 			packageProductDependencies = (
+				499BE83A281C5BC4006C9FFE /* MSD */,
 			);
 			productName = "MagicSparkleDonkey iOS";
 			productReference = 49FA4721261D8022003C3F8E /* MagicSparkleDonkey.app */;
@@ -177,6 +182,9 @@
 			dependencies = (
 			);
 			name = "MagicSparkleDonkey tvOS";
+			packageProductDependencies = (
+				499BE838281C5BC1006C9FFE /* MSD */,
+			);
 			productName = "MagicSparkleDonkey tvOS";
 			productReference = 49FA4733261D8022003C3F8E /* MagicSparkleDonkey.app */;
 			productType = "com.apple.product-type.application";
@@ -603,6 +611,14 @@
 			productName = MSD;
 		};
 		4993AEFE265C7BA500B00EFB /* MSD */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MSD;
+		};
+		499BE838281C5BC1006C9FFE /* MSD */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MSD;
+		};
+		499BE83A281C5BC4006C9FFE /* MSD */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MSD;
 		};

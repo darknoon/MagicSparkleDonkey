@@ -32,7 +32,9 @@ let package = Package(
             dependencies: ["MSD", "MetalRenderShaders"]
         ),
         
-        .target(name: "MetalRenderShaders", resources: [.process("Shaders.metal")]),
+        // I think this is required b/c I need the ShaderTypes file
+        .target(name: "MetalRenderShaders",
+                resources: [.process("Shaders.metal")]),
         
         .testTarget(
             name: "MSDTests",
