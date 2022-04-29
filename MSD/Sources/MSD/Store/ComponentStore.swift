@@ -15,7 +15,7 @@ public struct ComponentStore {
     internal var ids: SparseIntSet = []
     public var nextId: Entity.ID = 0
 
-    mutating func createEntity() -> Entity.ID {
+    public mutating func createEntity() -> Entity.ID {
         let id = nextId
         ids.insert(id)
         nextId += 1
@@ -47,7 +47,7 @@ public struct ComponentStore {
         storage[componentType]?.impl as? ComponentCollection<T>
     }
     
-    subscript<T: Component>(entity: Entity.ID) -> T? {
+    public subscript<T: Component>(entity: Entity.ID) -> T? {
         get {
             let componentType = ObjectIdentifier(T.Type.self)
             guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
@@ -58,7 +58,7 @@ public struct ComponentStore {
         // or default-reset to ComponentType.init()
     }
 
-    subscript<T: Component>(entity: Entity.ID) -> T {
+    public subscript<T: Component>(entity: Entity.ID) -> T {
         get {
             let componentType = ObjectIdentifier(T.Type.self)
             let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)!

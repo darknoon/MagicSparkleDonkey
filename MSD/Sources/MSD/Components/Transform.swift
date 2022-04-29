@@ -7,8 +7,12 @@
 
 import simd
 
-typealias Transform = simd_float4x4
+public typealias Transform = simd_float4x4
 
-struct TransformComponent: Component {
-    var transform: Transform = .identity
+public struct TransformComponent: Component {
+    public var transform: Transform = .identity
+    
+    public init(_ transform: Transform) {
+        self.transform = transform
+    }
 }

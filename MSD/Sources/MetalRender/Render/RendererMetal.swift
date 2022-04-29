@@ -35,8 +35,10 @@ public class RendererMetal: NSObject, MTKViewDelegate {
     
     let resourceManager: ResourceManager
     
+    let config: RenderConfig
+    
     // id->state?
-    var mesh: MeshRenderState
+    var loadedMeshes: [Resource.ID: MeshRenderState] = [:]
     
     let bufferAllocator: MDLMeshBufferAllocator
     
@@ -44,52 +46,65 @@ public class RendererMetal: NSObject, MTKViewDelegate {
     
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
     
-    var rotation: Float = 0
-    
     public init(config: RenderConfig, device: MTLDevice) throws {
         self.device = device
+        self.config = config
         guard let queue = self.device.makeCommandQueue() else { throw Failure.unexpectedMetalError }
         self.commandQueue = queue
         
         _uniforms = try GPUBufferQueue(device: device)
         
         resourceManager = ResourceManager(device: device)
-                
+        
         bufferAllocator = MTKMeshBufferAllocator(device: device)
         
-        let assetResource = MSD.ResourceBundle(bundle: .main).subdiv
+        super.init()
 
-        let asset = MDLAsset(url: URL(fileURLWithPath: assetResource.path, relativeTo: Bundle.main.resourceURL), vertexDescriptor: nil, bufferAllocator: bufferAllocator)
+        try loadDefaultResources()
+    }
+    
+    private func load(assetResource: MeshResource, for id: Resource.ID) throws {
+        let url = URL(fileURLWithPath: assetResource.path, relativeTo: Bundle.main.resourceURL)
+        let asset = MDLAsset(url: url, vertexDescriptor: nil, bufferAllocator: bufferAllocator)
         let meshes = asset.childObjects(of: MDLMesh.self) as! [MDLMesh]
         if let mesh = meshes.first {
             let inputs = MeshRenderState.Inputs(
-                meshResource: 1234,
+                meshResource: 0,
                 textureOverrides: [.diffuse: .textureName(name: "ColorMap")],
                 mesh: mesh,
                 renderConfig: config)
-            self.mesh = try MeshRenderState(from: inputs,
-                                        resourceManager: resourceManager,
-                                        for: device)
+            loadedMeshes[0] = try MeshRenderState(from: inputs,
+                                                resourceManager: resourceManager,
+                                                for: device)
         } else {
             throw RendererError.resourceNotFound(resource: assetResource.path)
         }
-        
-        super.init()
     }
+    
+    private func loadDefaultResources() throws {
+        // Add a default resource
+        try load(assetResource: MSD.ResourceBundle(bundle: .main).subdiv, for: Resource.ID(0))
+    }
+
+    public var displayListCallback: () -> RenderSystem.DisplayList = { [] }
     
     private func updateGameState() {
         _uniforms.next()
         
         /// Update any game state before rendering
         
-        uniforms.projectionMatrix = projectionMatrix
+        displayList = displayListCallback()
         
-        let rotationAxis = SIMD3<Float>(1, 1, 0)
-        let modelMatrix = simd_float4x4(rotation: rotation, axis: rotationAxis)
-        let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
-        uniforms.modelViewMatrix = simd_mul(viewMatrix, modelMatrix)
-        rotation += 0.01
+        uniforms.projectionMatrix = projectionMatrix
+
+        // TODO: write into uniforms display list array here
+        if let display = displayList.first {
+            let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
+            uniforms.modelViewMatrix = simd_mul(viewMatrix, display.transform)
+        }
     }
+    
+    var displayList: RenderSystem.DisplayList = []
     
     public func draw(in view: MTKView) {
         /// Per frame updates hare
@@ -98,7 +113,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
         
         if let commandBuffer = commandQueue.makeCommandBuffer() {
             
-            commandBuffer.addCompletedHandler { [semaphore = _uniforms.inFlightSemaphore](_ commandBuffer)-> Swift.Void in
+            commandBuffer.addCompletedHandler { [semaphore = _uniforms.inFlightSemaphore] _ in
                 semaphore.signal()
             }
             
@@ -113,45 +128,54 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                 /// Final pass rendering code here
                 renderEncoder.label = "Primary Render Encoder"
                 
-                renderEncoder.pushDebugGroup("Draw Mesh")
-                
-                // TODO: pull from mesh render state
-                renderEncoder.setCullMode(.back)
-                renderEncoder.setFrontFacing(.counterClockwise)
-                
-                renderEncoder.setRenderPipelineState(mesh.pipelineState)
-                
-                renderEncoder.setDepthStencilState(mesh.depthState)
-                
-                renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
-                renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
-                
-                for (index, element) in mesh.mesh.vertexDescriptor.layouts.enumerated() {
-                    guard let layout = element as? MDLVertexBufferLayout else {
-                        return
+                for display in displayList {
+                    let resourceId = display.resource
+                    guard let meshState = loadedMeshes[resourceId]
+                    else {
+                        print("Skipping render for mesh \(resourceId) because it is not loaded.")
+                        continue
+                    }
+                    renderEncoder.pushDebugGroup("Draw Mesh \(resourceId) \(meshState.mesh.name)")
+                    
+                    // TODO: pull from mesh render state
+                    renderEncoder.setCullMode(.back)
+                    renderEncoder.setFrontFacing(.counterClockwise)
+                    
+                    renderEncoder.setRenderPipelineState(meshState.pipelineState)
+                    
+                    renderEncoder.setDepthStencilState(meshState.depthState)
+                    
+                    renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
+                    renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
+                    
+                    for (index, element) in meshState.mesh.vertexDescriptor.layouts.enumerated() {
+                        guard let layout = element as? MDLVertexBufferLayout else {
+                            return
+                        }
+                        
+                        if layout.stride != 0 {
+                            let buffer = meshState.mesh.vertexBuffers[index]
+                            renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                        }
                     }
                     
-                    if layout.stride != 0 {
-                        let buffer = mesh.mesh.vertexBuffers[index]
-                        renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                    for (key, value) in meshState.textures {
+                        switch key {
+                        case .diffuse:
+                            renderEncoder.setFragmentTexture(value, index: TextureIndex.color.rawValue)
+                        }
                     }
-                }
-                
-                for (key, value) in mesh.textures {
-                    switch key {
-                    case .diffuse:
-                        renderEncoder.setFragmentTexture(value, index: TextureIndex.color.rawValue)
-                    }
-                }
-                
-                for submesh in mesh.mesh.submeshes {
-                    renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
-                                                        indexCount: submesh.indexCount,
-                                                        indexType: submesh.indexType,
-                                                        indexBuffer: submesh.indexBuffer.buffer,
-                                                        indexBufferOffset: submesh.indexBuffer.offset)
                     
+                    for submesh in meshState.mesh.submeshes {
+                        renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                            indexCount: submesh.indexCount,
+                                                            indexType: submesh.indexType,
+                                                            indexBuffer: submesh.indexBuffer.buffer,
+                                                            indexBufferOffset: submesh.indexBuffer.offset)
+                        
+                    }
                 }
+                
                 
                 renderEncoder.popDebugGroup()
                 

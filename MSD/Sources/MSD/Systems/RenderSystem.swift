@@ -5,31 +5,35 @@
 //  Created by Andrew Pouliot on 4/22/21.
 //
 
-struct MeshComponent : Component {
-    let resource: Int?
+public struct MeshComponent : Component {
+    public let resource: Resource.ID?
+    public init(_ resource: Resource.ID?) {
+        self.resource = resource
+    }
 }
 
-class RenderSystem : System {
-    typealias Inputs = (TransformComponent, MeshComponent)
+public class RenderSystem : System {
+    public typealias Inputs = (TransformComponent, MeshComponent)
+    public typealias Outputs = ()
     
-    typealias Outputs = ()
+    public typealias DisplayList = [Display]
     
-    struct Display {
-        let transform: Transform
-        let resource: Int
+    public struct Display {
+        public let transform: Transform
+        public let resource: Resource.ID
     }
     
     // Eh, is this the best?
-    var displayList: [Display] = []
+    public private(set) var displayList: DisplayList = []
     
-    func update(stepInfo: StepInfo, scene: Scene) {
-        
+    public init() {}
+    
+    public func update(stepInfo: StepInfo, scene: Scene) {
         displayList.removeAll()
 
         scene.store.forEach{(id, transform: inout TransformComponent, mesh: inout MeshComponent) in
             let t = transform.transform
             if let m = mesh.resource {
-                print("Render this mesh with transform \(t)")
                 displayList.append(Display(transform: t, resource: m))
             }
         }

@@ -10,12 +10,12 @@ import simd
 
 // = .identity
 extension simd_float4x4 {
-    static let identity = matrix_identity_float4x4
+    public static let identity = matrix_identity_float4x4
 }
 
 // = .identity
 extension simd_float3x3 {
-    static let identity = matrix_identity_float3x3
+    public static let identity = matrix_identity_float3x3
 }
 
 public extension simd_float4x4 {

@@ -7,14 +7,18 @@
 
 import Foundation
 
+typealias MaxChildrenTuple = (
+    // 16 children
+    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
+    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
+    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
+    Entity.ID, Entity.ID, Entity.ID, Entity.ID
+)
+
 public struct EntityChildCollection {
-    private var impl: [Entity.ID]
+    private var impl: TupleCollection<MaxChildrenTuple, Entity.ID>
 }
 
 public protocol HasHierarchy {
     var children: EntityChildCollection { get set }
-}
-
-extension HasHierarchy {
-    
 }

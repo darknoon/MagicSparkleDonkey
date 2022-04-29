@@ -1,31 +1,34 @@
 
 // Input to each frame iteration
-struct StepInfo {
+public struct StepInfo {
+    public init(timestep: Double) {
+        self.timestep = timestep
+    }
     let timestep: Double
 }
 
-protocol Updatable {
+public protocol Updatable {
     func update(stepInfo: StepInfo, scene: Scene)
 }
 
-protocol System: Updatable {
+public protocol System: Updatable {
     associatedtype Inputs
     associatedtype Outputs
 }
 
-struct AnySystem: Updatable {
+public extension System {
+    func eraseToAnySystem() -> AnySystem {
+        AnySystem(self)
+    }
+}
+
+public struct AnySystem: Updatable {
     private let update: (StepInfo, Scene) -> Void
     init<SystemType: System>(_ system: SystemType) {
         update = system.update
     }
-    func update(stepInfo: StepInfo, scene: Scene) {
+    public func update(stepInfo: StepInfo, scene: Scene) {
         update(stepInfo, scene)
-    }
-}
-
-extension System {
-    func eraseToAnySystem() -> AnySystem {
-        AnySystem(self)
     }
 }
 

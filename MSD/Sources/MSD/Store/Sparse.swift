@@ -77,7 +77,7 @@ typealias SparseIntSet = SparseArrayPaged<Nothing>
     }
 
     // Experimental: mutating forEach
-    mutating func forEach(_ body: (Entity.ID, inout Element) -> Void) {
+    public mutating func forEach(_ body: (Entity.ID, inout Element) -> Void) {
         dense.withUnsafeMutableBufferPointer{ ptr in
             for i in ptr.indices {
                 body(ptr[i].index, &ptr[i].element)
