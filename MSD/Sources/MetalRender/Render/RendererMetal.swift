@@ -11,18 +11,21 @@ import Metal
 import MetalKit
 import simd
 import MSD
+import MetalRenderShaders
 
-enum RendererError: Error {
+public enum RendererError: Error {
     case badVertexDescriptor
     case unexpectedMetalError
     case metalAllocationError
     case metalInvalidConfiguration(underlying: Error?)
     case meshBuild(mtkError: Error)
     case resourceNotFound(resource: String)
+    case shaderBundleNotFound
+    case shaderNotFound(name: String)
     case textureLoad(mtkError: Error)
 }
 
-class RendererMetal: NSObject, MTKViewDelegate {
+public class RendererMetal: NSObject, MTKViewDelegate {
     
     public let device: MTLDevice
 
@@ -43,7 +46,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
     
     var rotation: Float = 0
     
-    init(config: RenderConfig, device: MTLDevice) throws {
+    public init(config: RenderConfig, device: MTLDevice) throws {
         self.device = device
         guard let queue = self.device.makeCommandQueue() else { throw Failure.unexpectedMetalError }
         self.commandQueue = queue
@@ -88,7 +91,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
         rotation += 0.01
     }
     
-    func draw(in view: MTKView) {
+    public func draw(in view: MTKView) {
         /// Per frame updates hare
         
         _ = _uniforms.inFlightSemaphore.wait(timeout: DispatchTime.distantFuture)
@@ -163,7 +166,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
         }
     }
     
-    func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         /// Respond to drawable size or orientation changes here
         
         let aspect = Float(size.width) / Float(size.height)
@@ -173,7 +176,7 @@ class RendererMetal: NSObject, MTKViewDelegate {
 
 
 // Render state uses this as an input, so we need to rebuild whenever this changes
-struct RenderConfig {
+public struct RenderConfig {
     var depthStencilFormat: MTLPixelFormat
     var colorPixelFormat: MTLPixelFormat
     var sampleCount: Int
@@ -181,7 +184,7 @@ struct RenderConfig {
 
 extension MTKView {
     
-    var renderConfig: RenderConfig {
+    public var renderConfig: RenderConfig {
         get {
             .init(depthStencilFormat: depthStencilPixelFormat, colorPixelFormat: colorPixelFormat, sampleCount: sampleCount)
         }

@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -10,10 +10,10 @@ let package = Package(
         .iOS(.v13)
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
+        // Exposes MSD ECS with Metal Renderer 
         .library(
             name: "MSD",
-            targets: ["MSD"]),
+            targets: ["MSD", "MetalRender"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,6 +25,15 @@ let package = Package(
         .target(
             name: "MSD",
             dependencies: []),
+        
+        // Adds rendering support on top of ECS
+        .target(
+            name: "MetalRender",
+            dependencies: ["MSD", "MetalRenderShaders"]
+        ),
+        
+        .target(name: "MetalRenderShaders", resources: [.process("Shaders.metal")]),
+        
         .testTarget(
             name: "MSDTests",
             dependencies: ["MSD"]),

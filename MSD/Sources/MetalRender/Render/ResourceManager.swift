@@ -9,6 +9,7 @@ import Metal
 import MetalKit
 import ModelIO
 import MSD
+import MetalRenderShaders
 
 class ResourceManager {
     //TODO: track by resource id!

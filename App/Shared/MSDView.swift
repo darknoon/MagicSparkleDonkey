@@ -8,7 +8,7 @@
 import SwiftUI
 import MetalKit
 import MSD
-
+import MetalRender
 
 // Insert a render output view into a SwiftUI hierarchy
 struct MSDView : PlatformViewRepresentable {

@@ -9,7 +9,7 @@ import Metal
 import MetalKit
 import ModelIO
 import MSD
-
+import MetalRenderShaders
 
 public enum TextureKey: String {
     case diffuse
@@ -153,10 +153,20 @@ struct MeshRenderState {
                                               mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTLRenderPipelineState {
         /// Build a render state pipeline object
         
-        let library = device.makeDefaultLibrary()
+        // UGLY HARDCODED, but idk how else to fix this. Tried using a sentinel class for the bundle but it says it's part of the main executable. Oh well.
+        guard let shaderBundle = Bundle.main.resourceURL?.appendingPathComponent("MSD_MetalRenderShaders.bundle"),
+              let libraryURL = Bundle(url: shaderBundle)?.resourceURL?.appendingPathComponent("default.metallib")
+        else { throw Failure.shaderBundleNotFound }
         
-        let vertexFunction = library?.makeFunction(name: inputs.vertexFunctionName)
-        let fragmentFunction = library?.makeFunction(name: inputs.fragmentFunctionName)
+        print("Opening shaders from \(libraryURL.absoluteURL.path)")
+        
+        let library = try device.makeLibrary(URL: libraryURL)
+        
+        guard let vertexFunction = library.makeFunction(name: inputs.vertexFunctionName)
+        else { throw Failure.shaderNotFound(name: inputs.vertexFunctionName) }
+
+        guard let fragmentFunction = library.makeFunction(name: inputs.fragmentFunctionName)
+        else { throw Failure.shaderNotFound(name: inputs.vertexFunctionName) }
         
         let p = MTLRenderPipelineDescriptor()
         p.label = "RenderPipeline"
