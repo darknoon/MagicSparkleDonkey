@@ -1,8 +1,9 @@
 
 public class Scene {
     public init() {
-        root = Entity.ID()
+        root = store.createEntity()
         store[root] = TransformComponent(.identity)
+        store[root] = EntityChildCollection()
     }
 
     public var root: Entity.ID

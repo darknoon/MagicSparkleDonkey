@@ -48,3 +48,16 @@ extension TupleCollection: Hashable where Element: Hashable {
         self.forEach { hasher.combine($0) }
     }
 }
+
+// Added by darknoon
+extension TupleCollection {
+    init(repeating element: Element) {
+        let endIndex = MemoryLayout<Tuple>.stride / MemoryLayout<Element>.stride
+        self.tuple = withUnsafeTemporaryAllocation(of: Element.self, capacity: endIndex) { tempPtr in
+            for i in 0..<endIndex {
+                tempPtr[i] = element
+            }
+            return UnsafeRawPointer(tempPtr.baseAddress!).assumingMemoryBound(to: Tuple.self).pointee
+        }
+    }
+}

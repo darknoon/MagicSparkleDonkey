@@ -7,16 +7,34 @@
 
 import Foundation
 
-typealias MaxChildrenTuple = (
-    // 16 children
-    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
-    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
-    Entity.ID, Entity.ID, Entity.ID, Entity.ID,
-    Entity.ID, Entity.ID, Entity.ID, Entity.ID
-)
+public struct EntityChildCollection: MutableCollection, RandomAccessCollection {
+    private var impl: _FixedArray16<Entity.ID>
+    
+    public init() {
+        impl = []
+    }
+    
+    public typealias Element = Entity.ID
+    
+    public var startIndex: Int { impl.startIndex }
+    public var endIndex: Int { impl.endIndex }
+    
+    public subscript(index: Int) -> Element {
+        get {
+            impl[index]
+        }
+        set {
+            impl[index] = newValue
+        }
+    }
 
-public struct EntityChildCollection {
-    private var impl: TupleCollection<MaxChildrenTuple, Entity.ID>
+    public mutating func append(_ element: Element) {
+        impl.append(element)
+    }
+
+}
+
+extension EntityChildCollection: Component {
 }
 
 public protocol HasHierarchy {
