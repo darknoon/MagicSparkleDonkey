@@ -10,9 +10,4 @@ import MSD
 struct MeshResource {
     let id: Resource.ID
     let path: String
-    
-//    struct Runtime<API: GPUAPI> : MSD.RuntimeResource {
-//        let id: Resource.ID
-//        let runtime: API.MeshRuntimeType
-//    }
 }

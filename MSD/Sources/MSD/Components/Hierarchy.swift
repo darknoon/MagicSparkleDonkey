@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct EntityChildCollection: MutableCollection, RandomAccessCollection {
+public struct EntityChildCollection: MutableCollection, RandomAccessCollection, Equatable {
+    // Don't expose this detail to consumers, can increase the max child count in the future
     private var impl: _FixedArray16<Entity.ID>
     
     public init() {
@@ -32,11 +33,19 @@ public struct EntityChildCollection: MutableCollection, RandomAccessCollection {
         impl.append(element)
     }
 
+    public static func == (lhs: EntityChildCollection, rhs: EntityChildCollection) -> Bool {
+        lhs.impl == rhs.impl
+    }
 }
 
-extension EntityChildCollection: Component {
-}
+extension EntityChildCollection: Component { }
 
-public protocol HasHierarchy {
-    var children: EntityChildCollection { get set }
+extension EntityChildCollection: ExpressibleByArrayLiteral {
+    public init(arrayLiteral elements: Element...) {
+        self.init()
+        for element in elements {
+            impl.append(element)
+        }
+    }
+    
 }

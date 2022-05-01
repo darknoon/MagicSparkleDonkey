@@ -19,11 +19,6 @@ public struct Resource {
     }
 }
 
-// Resource after being loaded at runtime
-public protocol RuntimeResource {
-    var id: Resource.ID { get }
-}
-
 public struct ResourceBundle {
     let bundle: Bundle
     public init(bundle: Bundle) { self.bundle = bundle }

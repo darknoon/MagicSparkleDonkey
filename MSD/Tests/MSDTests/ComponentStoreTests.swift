@@ -63,7 +63,7 @@ class ComponentStoreTests_macOS: XCTestCase {
         
         let entKp = (0...4).map{ i -> (Entity.ID, Transform) in
             let id = store.createEntity()
-            let c = TransformComponent(transform: .init(scale: simd_float3(repeating: Float(i))))
+            let c = TransformComponent(Transform(scale: simd_float3(repeating: Float(i))))
             store.set(id: id, component: c)
             return (id, c.transform)
         }
