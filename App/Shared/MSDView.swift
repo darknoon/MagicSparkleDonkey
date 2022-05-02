@@ -16,14 +16,15 @@ struct RotationComponent: Component {
 }
 
 struct SimpleRotateSystem: System {
-    typealias Inputs = (Transform)
+    typealias Inputs = (RotationComponent)
     typealias Outputs = (Transform)
     
     func update(stepInfo: StepInfo, scene: MSD.Scene) {
         scene.store.forEach{(id, transform: inout TransformComponent, rotation: inout RotationComponent) in
             rotation.rotation += 0.01
             let rotationAxis = SIMD3<Float>(1, 1, 0)
-            let modelMatrix = simd_float4x4(rotation: rotation.rotation, axis: rotationAxis)
+            var modelMatrix = simd_float4x4(rotation: rotation.rotation, axis: rotationAxis)
+            modelMatrix.translation = transform.transform.translation
             transform.transform = modelMatrix
         }
     }
@@ -47,7 +48,10 @@ struct MSDView : PlatformViewRepresentable {
         var renderer: RendererMetal? = nil
         var scene = MSD.Scene()
         // Additional systems besides render
-        var systems: [AnySystem] = [SimpleRotateSystem().eraseToAnySystem()]
+        var systems: [AnySystem] = [
+            SimpleRotateSystem().eraseToAnySystem(),
+            RenderSystem().eraseToAnySystem()
+        ]
         var currentError: Error? = nil
         
         func updateAndDisplay() -> RenderSystem.DisplayList {
@@ -56,8 +60,7 @@ struct MSDView : PlatformViewRepresentable {
             for system in systems {
                 system.update(stepInfo: step, scene: scene)
             }
-            scene.renderSystem.update(stepInfo: step, scene: scene)
-            return scene.renderSystem.displayList
+            return scene.store[scene.root]
         }
     }
     
@@ -79,6 +82,7 @@ struct MSDView : PlatformViewRepresentable {
         do {
             let r = try RendererMetal(config: renderConfig, device: v.device!)
             context.coordinator.renderer = r
+
             addDefaultObject(to: context.coordinator.scene)
 
             r.displayListCallback = context.coordinator.updateAndDisplay
@@ -94,14 +98,25 @@ struct MSDView : PlatformViewRepresentable {
 }
 
 func addDefaultObject(to scene: MSD.Scene) {
-    let testObject = scene.store.createEntity()
-    scene.store[testObject] = TransformComponent(.identity)
-    // Render default mesh
-    scene.store[testObject] = MeshComponent(0)
-    scene.store[testObject] = RotationComponent(rotation: 0)
-
+    
     var children: EntityChildCollection = scene.store[scene.root]
-    children.append(testObject)
+    for x in 1..<10 {
+        let rowEntity = scene.store.createEntity()
+        scene.store[rowEntity] = TransformComponent(.identity)
+        var subChildren: EntityChildCollection = .init()
+        for y in 1..<10 {
+            let entity = scene.store.createEntity()
+            let t = simd_float4x4(translation: simd_float3(x: Float(x) * 0.2, y: Float(y) * 0.2, z: 0))
+            scene.store[entity] = TransformComponent(t)
+            // Render default mesh
+            scene.store[entity] = MeshComponent(0)
+            scene.store[entity] = RotationComponent(rotation: Float.random(in: 0...1))
+            subChildren.append(entity)
+        }
+        scene.store[rowEntity] = subChildren
+        children.append(rowEntity)
+    }
+    
     scene.store[scene.root] = children
 }
 

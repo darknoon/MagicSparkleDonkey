@@ -28,12 +28,14 @@ typedef struct
 } ColorInOut;
 
 vertex ColorInOut vertexShader(Vertex in [[stage_in]],
-                               constant MSDUniforms& uniforms [[ buffer(MSDBufferIndexUniforms) ]])
+                               constant MSDUniforms& uniforms [[ buffer(MSDBufferIndexUniforms) ]],
+                               constant MSDDraw& draw [[ buffer(MSDBufferIndexPerMeshData) ]]
+                )
 {
     ColorInOut out;
 
     float4 position = float4(in.position, 1.0);
-    out.position = uniforms.projectionMatrix * uniforms.modelViewMatrix * position;
+    out.position = uniforms.projectionMatrix * draw.modelViewMatrix * position;
     out.texCoord = in.texCoord;
 
     return out;

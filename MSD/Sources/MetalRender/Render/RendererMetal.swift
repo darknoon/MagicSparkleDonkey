@@ -43,6 +43,8 @@ public class RendererMetal: NSObject, MTKViewDelegate {
     let bufferAllocator: MDLMeshBufferAllocator
     
     @GPUBufferQueue var uniforms: Uniforms
+    // TODO: store object transforms in an array in an MTLBuffer
+    // var draws: DrawCallDataArray
     
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
     
@@ -86,30 +88,30 @@ public class RendererMetal: NSObject, MTKViewDelegate {
         try load(assetResource: MSD.ResourceBundle(bundle: .main).subdiv, for: Resource.ID(0))
     }
 
-    public var displayListCallback: () -> RenderSystem.DisplayList = { [] }
+    public var displayListCallback: () -> RenderSystem.DisplayList = { .empty }
     
-    private func updateGameState() {
+    private func updateGameState() -> RenderSystem.DisplayList {
         _uniforms.next()
         
         /// Update any game state before rendering
         
-        displayList = displayListCallback()
+        let displayList = displayListCallback()
         
         uniforms.projectionMatrix = projectionMatrix
-
-        // TODO: write into uniforms display list array here
-        if let display = displayList.first {
-            let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
-            uniforms.modelViewMatrix = simd_mul(viewMatrix, display.transform)
-        }
+        
+        return displayList
     }
-    
-    var displayList: RenderSystem.DisplayList = []
     
     public func draw(in view: MTKView) {
         /// Per frame updates hare
         
         _ = _uniforms.inFlightSemaphore.wait(timeout: DispatchTime.distantFuture)
+        
+        guard let commandBuffer = commandQueue.makeCommandBuffer()
+        else {
+            print("Error: Couldn't make command buffer!")
+            return
+        }
         
         if let commandBuffer = commandQueue.makeCommandBuffer() {
             
@@ -117,8 +119,10 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                 semaphore.signal()
             }
             
-            self.updateGameState()
-            
+            let displayList = self.updateGameState().displays
+            // TODO: get camera?
+            let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
+
             /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
             ///   holding onto the drawable and blocking the display pipeline any longer than necessary
             let renderPassDescriptor = view.currentRenderPassDescriptor
@@ -135,7 +139,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                         print("Skipping render for mesh \(resourceId) because it is not loaded.")
                         continue
                     }
-                    renderEncoder.pushDebugGroup("Draw Mesh \(resourceId) \(meshState.mesh.name)")
+                    renderEncoder.pushDebugGroup("Draw Mesh \(display.entity) \(resourceId) \(meshState.mesh.name)")
                     
                     // TODO: pull from mesh render state
                     renderEncoder.setCullMode(.back)
@@ -146,6 +150,9 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                     renderEncoder.setDepthStencilState(meshState.depthState)
                     
                     renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
+                    let t = viewMatrix * display.transform
+                    renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
+
                     renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
                     
                     for (index, element) in meshState.mesh.vertexDescriptor.layouts.enumerated() {
@@ -174,10 +181,12 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                                                             indexBufferOffset: submesh.indexBuffer.offset)
                         
                     }
+                    
+                    renderEncoder.popDebugGroup()
+
                 }
                 
                 
-                renderEncoder.popDebugGroup()
                 
                 renderEncoder.endEncoding()
                 

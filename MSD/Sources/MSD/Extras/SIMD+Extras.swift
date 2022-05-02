@@ -71,6 +71,44 @@ extension simd_float4x4 {
     }
 }
 
+// Grab translation vector from matrix
+public extension simd_float4x4 {
+    @inline(__always)
+    var translation: simd_float3 {
+        get {
+            return columns.3.xyz
+        }
+        set {
+            columns.3.xyz = newValue
+        }
+    }
+}
+
+// a.xy, a.yx etc
+extension SIMD4 {
+    var xy: SIMD2<Scalar> {
+        .init(x, y)
+    }
+
+    @inline(__always)
+    var xyz: SIMD3<Scalar> {
+        get {
+            .init(x, y, z)
+        }
+        set {
+            x = newValue.x
+            y = newValue.y
+            z = newValue.z
+        }
+    }
+    @inline(__always)
+    var yx: SIMD2<Scalar> {
+        .init(y, x)
+    }
+}
+
+
+
 public func toRadians(degrees: Float) -> Float {
     return (degrees / 180) * .pi
 }

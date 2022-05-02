@@ -25,7 +25,8 @@ typedef NS_ENUM(NSInteger, MSDBufferIndex)
 {
     MSDBufferIndexMeshPositions = 0,
     MSDBufferIndexMeshGenerics  = 1,
-    MSDBufferIndexUniforms      = 2
+    MSDBufferIndexUniforms      = 2,
+    MSDBufferIndexPerMeshData   = 3,
 } NS_SWIFT_NAME(BufferIndex);
 
 typedef NS_ENUM(NSInteger, MSDVertexSemantic)
@@ -54,8 +55,13 @@ typedef NS_ENUM(NSInteger, MSDTextureIndex)
 typedef struct
 {
     matrix_float4x4 projectionMatrix;
-    matrix_float4x4 modelViewMatrix;
 } MSDUniforms NS_SWIFT_NAME(Uniforms);
+
+// Each draw consists of one of these
+typedef struct
+{
+    matrix_float4x4 modelViewMatrix;
+} MSDDraw;
 
 #endif /* ShaderTypes_h */
 
