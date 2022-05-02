@@ -32,6 +32,10 @@ public struct EntityChildCollection: MutableCollection, RandomAccessCollection, 
     public mutating func append(_ element: Element) {
         impl.append(element)
     }
+    
+    public mutating func append(_ entity: Entity) {
+        impl.append(entity.id)
+    }
 
     public static func == (lhs: EntityChildCollection, rhs: EntityChildCollection) -> Bool {
         lhs.impl == rhs.impl

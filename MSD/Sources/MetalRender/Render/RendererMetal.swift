@@ -117,9 +117,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
             semaphore.signal()
         }
         
-        let displayList = self.updateGameState().displays
-        // TODO: get camera?
-        let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
+        let displayList = self.updateGameState()
         
         /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
         ///   holding onto the drawable and blocking the display pipeline any longer than necessary
@@ -130,7 +128,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
             /// Final pass rendering code here
             renderEncoder.label = "Primary Render Encoder"
             
-            for display in displayList {
+            for display in displayList.displays {
                 let resourceId = display.resource
                 guard let meshState = loadedMeshes[resourceId]
                 else {
@@ -148,7 +146,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                 renderEncoder.setDepthStencilState(meshState.depthState)
                 
                 renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
-                let t = viewMatrix * display.transform
+                let t = displayList.viewMatrix * display.transform
                 renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
                 
                 renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)

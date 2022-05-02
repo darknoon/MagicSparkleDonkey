@@ -9,24 +9,6 @@ import XCTest
 @testable import MSD
 import simd
 
-// Old ones
-fileprivate extension ComponentStore {
-
-    mutating func set<T: Component>(id: Entity.ID, component: T) {
-        let componentType = ObjectIdentifier(T.Type.self)
-        let entry: ComponentCollection<T> = findOrCreateStorageEntry(componentType: componentType)
-        entry[id] = component
-    }
-    
-    func get<T: Component>(entity: Entity.ID) -> T? {
-        let componentType = ObjectIdentifier(T.Type.self)
-        guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
-        else { return nil }
-        return entry.storage[entity]
-    }
-
-}
-
 class ComponentStoreTests_macOS: XCTestCase {
 
     struct TestComponent : Component, Equatable {
@@ -62,7 +44,7 @@ class ComponentStoreTests_macOS: XCTestCase {
         var store = ComponentStore()
         
         let entKp = (0...4).map{ i -> (Entity.ID, Transform) in
-            let id = store.createEntity()
+            let id = store.createEntityId()
             let c = TransformComponent(Transform(scale: simd_float3(repeating: Float(i))))
             store.set(id: id, component: c)
             return (id, c.transform)
@@ -82,7 +64,7 @@ class ComponentStoreTests_macOS: XCTestCase {
         
         let end  = 123
         for _ in 0..<end {
-            let _ = store.createEntity()
+            let _ = store.createEntityId()
         }
 
         let actual = store.ids.map{$0.index}
@@ -100,7 +82,7 @@ class ComponentStoreTests_macOS: XCTestCase {
     func testMutateSingle() {
         var store = ComponentStore()
 
-        let ents = (0...9).map{ _ in store.createEntity() }
+        let ents = (0...9).map{ _ in store.createEntityId() }
         
         // Create counters initialized 0...9
         for (i, entity) in ents.enumerated() {
@@ -121,7 +103,7 @@ class ComponentStoreTests_macOS: XCTestCase {
     func testMutateTwoComponents() {
         var store = ComponentStore()
 
-        let ents = (0...9).map{ _ in store.createEntity() }
+        let ents = (0...9).map{ _ in store.createEntityId() }
         
         // Create counters initialized 0...9
         for (i, entity) in ents.enumerated() {
@@ -147,7 +129,7 @@ class ComponentStoreTests_macOS: XCTestCase {
         var store = ComponentStore()
 
         let r = 0...3
-        let ents = r.map{ _ in store.createEntity() }
+        let ents = r.map{ _ in store.createEntityId() }
         
         // Create counters initialized 0...9
         for (i, entity) in ents.enumerated() {

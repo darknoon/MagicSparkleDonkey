@@ -58,7 +58,7 @@ struct MSDView : PlatformViewRepresentable {
             // TODO: get info about display link? to pass in here
             let step = StepInfo(timestep: 1.0/60.0)
             systems.update(stepInfo: step, scene: scene)
-            return scene.store[scene.root] as RenderSystem.DisplayList
+            return scene.rootEntity[RenderSystem.DisplayList.self]
         }
     }
     
@@ -82,6 +82,7 @@ struct MSDView : PlatformViewRepresentable {
             context.coordinator.renderer = r
 
             addDefaultObject(to: context.coordinator.scene)
+            addDefaultCamera(to: context.coordinator.scene)
 
             r.displayListCallback = context.coordinator.updateAndDisplay
             v.delegate = r
@@ -95,26 +96,35 @@ struct MSDView : PlatformViewRepresentable {
 
 }
 
+func addDefaultCamera(to scene: MSD.Scene) {
+    var camera = scene.store.createEntity()
+    camera[TransformComponent.self] = .init(Transform(translation: .init(x: 0, y: 0, z: -8)))
+    // Add as child
+    var ch: EntityChildCollection = scene.rootEntity[EntityChildCollection.self]
+    ch.append(camera)
+    scene.rootEntity[EntityChildCollection.self] = ch
+}
+
 func addDefaultObject(to scene: MSD.Scene) {
     
-    var children: EntityChildCollection = scene.store[scene.root]
+    var children: EntityChildCollection = scene.rootEntity[EntityChildCollection.self]
     for x in 1..<10 {
-        let rowEntity = scene.store.createEntity()
-        scene.store[rowEntity] = TransformComponent(.identity)
+        var rowEntity = scene.store.createEntity()
+        rowEntity[TransformComponent.self] = TransformComponent(.identity)
         var subChildren: EntityChildCollection = .init()
         for y in 1..<10 {
-            let entity = scene.store.createEntity()
+            var entity = scene.store.createEntity()
             let t = simd_float4x4(translation: simd_float3(x: Float(x) * 0.2, y: Float(y) * 0.2, z: 0))
-            scene.store[entity] = TransformComponent(t)
+            entity[TransformComponent.self] = TransformComponent(t)
             // Render default mesh
-            scene.store[entity] = MeshComponent(0)
-            scene.store[entity] = RotationComponent(rotation: Float.random(in: 0...1))
+            entity[MeshComponent.self] = MeshComponent(0)
+            entity[RotationComponent.self] = RotationComponent(rotation: Float.random(in: 0...1))
             subChildren.append(entity)
         }
-        scene.store[rowEntity] = subChildren
+        rowEntity[EntityChildCollection.self] = subChildren
         children.append(rowEntity)
     }
     
-    scene.store[scene.root] = children
+    scene.rootEntity[EntityChildCollection.self] = children
 }
 

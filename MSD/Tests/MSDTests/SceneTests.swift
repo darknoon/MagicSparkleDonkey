@@ -35,16 +35,14 @@ final class SceneTests: XCTestCase {
     }
     
     func testParentChild() {
-        let root = scene.root
-        
         // add children
-        let child0 = scene.store.createEntity()
-        scene.store[child0] = TransformComponent(.identity)
+        var child0 = scene.store.createEntity()
+        child0[TransformComponent.self] = .init(.identity)
 
-        let child1 = scene.store.createEntity()
-        scene.store[child1] = TransformComponent(.identity)
+        var child1 = scene.store.createEntity()
+        child1[TransformComponent.self] = .init(.identity)
 
-        scene.store[root] = [child0, child1] as EntityChildCollection
+        scene.rootEntity[EntityChildCollection.self] = [child0.id, child1.id]
         
         // Very simple function to iterate depth-first
         func traverse(scene: Scene, childrenOf entity: Entity.ID, fn: (Entity.ID) -> Void) {
@@ -61,7 +59,7 @@ final class SceneTests: XCTestCase {
             traversal.append(child)
         }
         
-        XCTAssertEqual(traversal, [scene.root, child0, child1])
+        XCTAssertEqual(traversal, [scene.root, child0.id, child1.id])
     }
 
 }
