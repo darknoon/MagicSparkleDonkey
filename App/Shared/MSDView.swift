@@ -48,7 +48,7 @@ struct MSDView : PlatformViewRepresentable {
         var renderer: RendererMetal? = nil
         var scene = MSD.Scene()
         // Additional systems besides render
-        var systems: [AnySystem] = [
+        var systems: SystemStore = [
             SimpleRotateSystem().eraseToAnySystem(),
             RenderSystem().eraseToAnySystem()
         ]
@@ -57,10 +57,8 @@ struct MSDView : PlatformViewRepresentable {
         func updateAndDisplay() -> RenderSystem.DisplayList {
             // TODO: get info about display link? to pass in here
             let step = StepInfo(timestep: 1.0/60.0)
-            for system in systems {
-                system.update(stepInfo: step, scene: scene)
-            }
-            return scene.store[scene.root]
+            systems.update(stepInfo: step, scene: scene)
+            return scene.store[scene.root] as RenderSystem.DisplayList
         }
     }
     

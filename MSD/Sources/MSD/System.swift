@@ -23,8 +23,12 @@ public extension System {
 }
 
 public struct AnySystem: Updatable {
+    #if DEBUG
+    private let type: ObjectIdentifier
+    #endif
     private let update: (StepInfo, Scene) -> Void
     init<SystemType: System>(_ system: SystemType) {
+        type = ObjectIdentifier(SystemType.self)
         update = system.update
     }
     public func update(stepInfo: StepInfo, scene: Scene) {
@@ -34,20 +38,27 @@ public struct AnySystem: Updatable {
 
 // Just a generic pace to put your systems, and execute them
 // Not much utility without better scheduling…
-class SystemStore: Updatable {
+public final class SystemStore: Updatable {
     // Whatever existential is necessary to represent systems, ie if System is a PAT
     
     // Array of existentials for now
     var systems: [AnySystem] = []
     
-    func add<S: System>(system: S) {
+    public func add<S: System>(system: S) {
         systems.append(AnySystem(system))
     }
     
-    func update(stepInfo: StepInfo, scene: Scene) {
+    public func update(stepInfo: StepInfo, scene: Scene) {
         // TODO: topologically-sort systems before execution
         systems.forEach{
             $0.update(stepInfo: stepInfo, scene: scene)
         }
+    }
+}
+
+extension SystemStore: ExpressibleByArrayLiteral {
+    convenience public init(arrayLiteral systems: AnySystem...) {
+        self.init()
+        self.systems = systems
     }
 }

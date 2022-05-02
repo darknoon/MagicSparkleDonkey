@@ -113,86 +113,83 @@ public class RendererMetal: NSObject, MTKViewDelegate {
             return
         }
         
-        if let commandBuffer = commandQueue.makeCommandBuffer() {
+        commandBuffer.addCompletedHandler { [semaphore = _uniforms.inFlightSemaphore] _ in
+            semaphore.signal()
+        }
+        
+        let displayList = self.updateGameState().displays
+        // TODO: get camera?
+        let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
+        
+        /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
+        ///   holding onto the drawable and blocking the display pipeline any longer than necessary
+        let renderPassDescriptor = view.currentRenderPassDescriptor
+        
+        if let renderPassDescriptor = renderPassDescriptor, let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
             
-            commandBuffer.addCompletedHandler { [semaphore = _uniforms.inFlightSemaphore] _ in
-                semaphore.signal()
+            /// Final pass rendering code here
+            renderEncoder.label = "Primary Render Encoder"
+            
+            for display in displayList {
+                let resourceId = display.resource
+                guard let meshState = loadedMeshes[resourceId]
+                else {
+                    print("Skipping render for mesh \(resourceId) because it is not loaded.")
+                    continue
+                }
+                renderEncoder.pushDebugGroup("Draw Mesh \(display.entity) \(resourceId) \(meshState.mesh.name)")
+                
+                // TODO: pull from mesh render state
+                renderEncoder.setCullMode(.back)
+                renderEncoder.setFrontFacing(.counterClockwise)
+                
+                renderEncoder.setRenderPipelineState(meshState.pipelineState)
+                
+                renderEncoder.setDepthStencilState(meshState.depthState)
+                
+                renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
+                let t = viewMatrix * display.transform
+                renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
+                
+                renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
+                
+                for (index, element) in meshState.mesh.vertexDescriptor.layouts.enumerated() {
+                    guard let layout = element as? MDLVertexBufferLayout else {
+                        return
+                    }
+                    
+                    if layout.stride != 0 {
+                        let buffer = meshState.mesh.vertexBuffers[index]
+                        renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
+                    }
+                }
+                
+                for (key, value) in meshState.textures {
+                    switch key {
+                    case .diffuse:
+                        renderEncoder.setFragmentTexture(value, index: TextureIndex.color.rawValue)
+                    }
+                }
+                
+                for submesh in meshState.mesh.submeshes {
+                    renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
+                                                        indexCount: submesh.indexCount,
+                                                        indexType: submesh.indexType,
+                                                        indexBuffer: submesh.indexBuffer.buffer,
+                                                        indexBufferOffset: submesh.indexBuffer.offset)
+                    
+                }
+                
+                renderEncoder.popDebugGroup()
+                
             }
             
-            let displayList = self.updateGameState().displays
-            // TODO: get camera?
-            let viewMatrix = simd_float4x4(translation: simd_float3(0.0, 0.0, -8.0))
-
-            /// Delay getting the currentRenderPassDescriptor until we absolutely need it to avoid
-            ///   holding onto the drawable and blocking the display pipeline any longer than necessary
-            let renderPassDescriptor = view.currentRenderPassDescriptor
             
-            if let renderPassDescriptor = renderPassDescriptor, let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-                
-                /// Final pass rendering code here
-                renderEncoder.label = "Primary Render Encoder"
-                
-                for display in displayList {
-                    let resourceId = display.resource
-                    guard let meshState = loadedMeshes[resourceId]
-                    else {
-                        print("Skipping render for mesh \(resourceId) because it is not loaded.")
-                        continue
-                    }
-                    renderEncoder.pushDebugGroup("Draw Mesh \(display.entity) \(resourceId) \(meshState.mesh.name)")
-                    
-                    // TODO: pull from mesh render state
-                    renderEncoder.setCullMode(.back)
-                    renderEncoder.setFrontFacing(.counterClockwise)
-                    
-                    renderEncoder.setRenderPipelineState(meshState.pipelineState)
-                    
-                    renderEncoder.setDepthStencilState(meshState.depthState)
-                    
-                    renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
-                    let t = viewMatrix * display.transform
-                    renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
-
-                    renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
-                    
-                    for (index, element) in meshState.mesh.vertexDescriptor.layouts.enumerated() {
-                        guard let layout = element as? MDLVertexBufferLayout else {
-                            return
-                        }
-                        
-                        if layout.stride != 0 {
-                            let buffer = meshState.mesh.vertexBuffers[index]
-                            renderEncoder.setVertexBuffer(buffer.buffer, offset:buffer.offset, index: index)
-                        }
-                    }
-                    
-                    for (key, value) in meshState.textures {
-                        switch key {
-                        case .diffuse:
-                            renderEncoder.setFragmentTexture(value, index: TextureIndex.color.rawValue)
-                        }
-                    }
-                    
-                    for submesh in meshState.mesh.submeshes {
-                        renderEncoder.drawIndexedPrimitives(type: submesh.primitiveType,
-                                                            indexCount: submesh.indexCount,
-                                                            indexType: submesh.indexType,
-                                                            indexBuffer: submesh.indexBuffer.buffer,
-                                                            indexBufferOffset: submesh.indexBuffer.offset)
-                        
-                    }
-                    
-                    renderEncoder.popDebugGroup()
-
-                }
-                
-                
-                
-                renderEncoder.endEncoding()
-                
-                if let drawable = view.currentDrawable {
-                    commandBuffer.present(drawable)
-                }
+            
+            renderEncoder.endEncoding()
+            
+            if let drawable = view.currentDrawable {
+                commandBuffer.present(drawable)
             }
             
             commandBuffer.commit()
