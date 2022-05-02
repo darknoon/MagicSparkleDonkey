@@ -10,27 +10,24 @@ final class SceneTests: XCTestCase {
     var scene = Scene()
     
     func testInitScene() {
-        // Create an empty scene
-        let s = scene
         // Get the root's transform
-        
-        let t = (scene.store[s.root] as TransformComponent?)?.transform
+        let t = scene.rootEntity[TransformComponent.self]?.transform
         
         // Should be identity
         XCTAssertEqual(t, .identity)
         
         // Should have children array, but not children
-        let c = scene.store[s.root] as EntityChildCollection?
+        let c: EntityChildCollection? = scene.rootEntity[EntityChildCollection.self]
         XCTAssertEqual(c, EntityChildCollection())
     }
     
     func testCustomComponent() {
-        let e = scene.root
+        var e = scene.rootEntity
         
-        scene.store[e] = TestComponent(hello: 111)
-        scene.store[e] = TestComponent(hello: 123)
+        e[TestComponent.self] = TestComponent(hello: 111)
+        e[TestComponent.self] = TestComponent(hello: 123)
 
-        let t = (scene.store[e] as TestComponent?)?.hello
+        let t = e[TestComponent.self]?.hello
         XCTAssertEqual(t!, 123)
     }
     
@@ -47,7 +44,7 @@ final class SceneTests: XCTestCase {
         // Very simple function to iterate depth-first
         func traverse(scene: Scene, childrenOf entity: Entity.ID, fn: (Entity.ID) -> Void) {
             fn(entity)
-            if let children = scene.store[entity] as EntityChildCollection? {
+            if let children = scene.store[entity]?.children {
                 for child in children {
                     traverse(scene: scene, childrenOf: child, fn: fn)
                 }

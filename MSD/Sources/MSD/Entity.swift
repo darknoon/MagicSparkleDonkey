@@ -23,23 +23,28 @@ public struct Entity {
         get {
             componentStorage.get(entity: id)
         }
-        // {set}?: should we allow nilling out a component?
-        // or default-reset to ComponentType.init()
+        set {
+            if let newValue = newValue {
+                componentStorage.set(id: id, component: newValue)
+            } else {
+                componentStorage.clear(entity: id, componentType: T.self)
+            }
+        }
     }
 
-    public subscript<T: Component>(_ : T.Type) -> T {
-        get {
-            componentStorage.get(entity: id)!
-        }
-        // TODO: _read etc would allow us to improve performance by not copying in-out any values
-//        _read {
-//            guard let entry: ComponentCollection<T> = componentStorage.findStorageEntry(componentType: ObjectIdentifier(T.self))
-//            else { throw }
-//            yield entry[id]
+//    public subscript<T: Component>(_ : T.Type) -> T {
+//        get {
+//            componentStorage.get(entity: id)!
 //        }
-        set {
-            componentStorage.set(id: id, component: newValue)
-        }
-    }
+//        // TODO: _read etc would allow us to improve performance by not copying in-out any values
+////        _read {
+////            guard let entry: ComponentCollection<T> = componentStorage.findStorageEntry(componentType: ObjectIdentifier(T.self))
+////            else { throw }
+////            yield entry[id]
+////        }
+//        set {
+//            componentStorage.set(id: id, component: newValue)
+//        }
+//    }
 
 }

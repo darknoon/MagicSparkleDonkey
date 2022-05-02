@@ -62,35 +62,6 @@ public struct ComponentStore {
     }
 }
 
-
-// Weird ones store[entity] = TransformComponent()
-//extension ComponentStore {
-//    public subscript<T: Component>(entity: Entity.ID) -> T? {
-//        get {
-//            let componentType = ObjectIdentifier(T.Type.self)
-//            guard let entry: ComponentCollection<T> = storage.findStorageEntry(componentType: componentType)
-//            else { return nil }
-//            return entry.storage[entity]
-//        }
-//        // {set}?: should we allow nilling out a component?
-//        // or default-reset to ComponentType.init()
-//    }
-//
-//    public subscript<T: Component>(entity: Entity.ID) -> T {
-//        get {
-//            let componentType = ObjectIdentifier(T.Type.self)
-//            let entry: ComponentCollection<T> = storage.findStorageEntry(componentType: componentType)!
-//            return entry.storage[entity]!
-//        }
-//        set(newValue) {
-//            let componentType = ObjectIdentifier(T.Type.self)
-//            let entry: ComponentCollection<T> = storage.findOrCreateStorageEntry(componentType: componentType)
-//            entry.storage[entity] = newValue
-//        }
-//    }
-//
-//}
-
 // Old ones (but actually decent) componentStore.set(id, TransformComponent()) | componentStore.get() as TransformComponent
 extension ComponentStore {
     
@@ -122,9 +93,16 @@ internal extension ComponentStore.Storage {
         return entry.storage[entity]
     }
 
+    // Only valid if this entity has this component, otherwise will abort!
+    func clear<T: Component>(entity: Entity.ID, componentType: T.Type) {
+        let componentType = ObjectIdentifier(T.Type.self)
+        guard let entry: ComponentCollection<T> = findStorageEntry(componentType: componentType)
+        else { return }
+        entry.storage.remove(at: entity)
+    }
 }
 
-// New subscripts
+// New subscripts store[entityId] -> Entity 
 public extension ComponentStore {
     enum Failure: Error {
         case entityDoesNotExist

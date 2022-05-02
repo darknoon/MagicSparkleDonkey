@@ -53,3 +53,14 @@ extension EntityChildCollection: ExpressibleByArrayLiteral {
     }
     
 }
+
+extension Entity {
+    var children: EntityChildCollection? {
+        get {
+            self[EntityChildCollection.self]
+        }
+        set {
+            self[EntityChildCollection.self] = newValue
+        }
+    }
+}

@@ -9,7 +9,7 @@ import XCTest
 @testable import MSD
 import simd
 
-class ComponentStoreTests_macOS: XCTestCase {
+class ComponentStoreTests: XCTestCase {
 
     struct TestComponent : Component, Equatable {
         var hello: Int

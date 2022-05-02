@@ -58,7 +58,7 @@ struct MSDView : PlatformViewRepresentable {
             // TODO: get info about display link? to pass in here
             let step = StepInfo(timestep: 1.0/60.0)
             systems.update(stepInfo: step, scene: scene)
-            return scene.rootEntity[RenderSystem.DisplayList.self]
+            return scene.rootEntity[RenderSystem.DisplayList.self]!
         }
     }
     
@@ -100,14 +100,17 @@ func addDefaultCamera(to scene: MSD.Scene) {
     var camera = scene.store.createEntity()
     camera[TransformComponent.self] = .init(Transform(translation: .init(x: 0, y: 0, z: -8)))
     // Add as child
-    var ch: EntityChildCollection = scene.rootEntity[EntityChildCollection.self]
-    ch.append(camera)
-    scene.rootEntity[EntityChildCollection.self] = ch
+    var rootChildren: EntityChildCollection = scene.rootEntity[EntityChildCollection.self] ?? EntityChildCollection()
+    rootChildren.append(camera)
+    scene.rootEntity[EntityChildCollection.self] = rootChildren
+    
+    // TODO: enable this expression with _read all the way down to store? `scene.rootEntity[EntityChildCollection.self].append(camera)`
+    
 }
 
 func addDefaultObject(to scene: MSD.Scene) {
     
-    var children: EntityChildCollection = scene.rootEntity[EntityChildCollection.self]
+    var children = scene.rootEntity[EntityChildCollection.self]!
     for x in 1..<10 {
         var rowEntity = scene.store.createEntity()
         rowEntity[TransformComponent.self] = TransformComponent(.identity)
