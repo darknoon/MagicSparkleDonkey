@@ -45,6 +45,7 @@ public class RendererMetal: NSObject, MTKViewDelegate {
     @GPUBufferQueue var uniforms: Uniforms
     // TODO: store object transforms in an array in an MTLBuffer
     // var draws: DrawCallDataArray
+    var perDrawData: GPUMemoryPool
     
     var projectionMatrix: matrix_float4x4 = matrix_float4x4()
     
@@ -59,6 +60,8 @@ public class RendererMetal: NSObject, MTKViewDelegate {
         resourceManager = ResourceManager(device: device)
         
         bufferAllocator = MTKMeshBufferAllocator(device: device)
+        
+        perDrawData = try GPUMemoryPool(device: device, size: 2_097_152)
         
         super.init()
 
@@ -107,6 +110,8 @@ public class RendererMetal: NSObject, MTKViewDelegate {
         
         _ = _uniforms.inFlightSemaphore.wait(timeout: DispatchTime.distantFuture)
         
+        perDrawData.beginFrame()
+        
         guard let commandBuffer = commandQueue.makeCommandBuffer()
         else {
             print("Error: Couldn't make command buffer!")
@@ -123,12 +128,19 @@ public class RendererMetal: NSObject, MTKViewDelegate {
         ///   holding onto the drawable and blocking the display pipeline any longer than necessary
         let renderPassDescriptor = view.currentRenderPassDescriptor
         
-        if let renderPassDescriptor = renderPassDescriptor, let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor) {
-            
-            /// Final pass rendering code here
-            renderEncoder.label = "Primary Render Encoder"
-            
-            for display in displayList.displays {
+        guard  let renderPassDescriptor = renderPassDescriptor,
+               let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+        else {
+            print("Could not make render encoder")
+            return
+        }
+        
+        /// Final pass rendering code here
+        renderEncoder.label = "Primary Render Encoder"
+        
+        for display in displayList.displays {
+            do {
+                
                 let resourceId = display.resource
                 guard let meshState = loadedMeshes[resourceId]
                 else {
@@ -147,7 +159,8 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                 
                 renderEncoder.setVertexBuffer($uniforms.buffer, offset:$uniforms.offset, index: BufferIndex.uniforms.rawValue)
                 let t = displayList.viewMatrix * display.transform
-                renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
+                // renderEncoder.setVertexStruct(MSDDraw(modelViewMatrix: t), index: BufferIndex.perMeshData.rawValue)
+                renderEncoder.setVertexBuffer(perDrawData.currentBuffer, offset:try perDrawData.append(MSDDraw(modelViewMatrix: t)), index: BufferIndex.perMeshData.rawValue)
                 
                 renderEncoder.setFragmentBuffer(_uniforms.dynamicUniformBuffer, offset:_uniforms.bufferOffset, index: BufferIndex.uniforms.rawValue)
                 
@@ -179,19 +192,21 @@ public class RendererMetal: NSObject, MTKViewDelegate {
                 }
                 
                 renderEncoder.popDebugGroup()
-                
+            } catch {
+                print("Draw \(display) failed: \(error)")
             }
             
-            
-            
-            renderEncoder.endEncoding()
-            
-            if let drawable = view.currentDrawable {
-                commandBuffer.present(drawable)
-            }
-            
-            commandBuffer.commit()
         }
+        
+        perDrawData.finishFrame()
+
+        renderEncoder.endEncoding()
+        
+        if let drawable = view.currentDrawable {
+            commandBuffer.present(drawable)
+        }
+        
+        commandBuffer.commit()
     }
     
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

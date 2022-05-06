@@ -55,9 +55,20 @@ extension TupleCollection {
         let endIndex = MemoryLayout<Tuple>.stride / MemoryLayout<Element>.stride
         self.tuple = withUnsafeTemporaryAllocation(of: Element.self, capacity: endIndex) { tempPtr in
             for i in 0..<endIndex {
-                tempPtr[i] = element
+                (tempPtr.baseAddress! + i).initialize(to: element)
             }
             return UnsafeRawPointer(tempPtr.baseAddress!).assumingMemoryBound(to: Tuple.self).pointee
         }
     }
+
+    init(with builder: (Int) throws -> Element ) rethrows {
+        let endIndex = MemoryLayout<Tuple>.stride / MemoryLayout<Element>.stride
+        self.tuple = try withUnsafeTemporaryAllocation(of: Element.self, capacity: endIndex) { tempPtr in
+            for i in 0..<endIndex {
+                (tempPtr.baseAddress! + i).initialize(to: try builder(i))
+            }
+            return UnsafeRawPointer(tempPtr.baseAddress!).assumingMemoryBound(to: Tuple.self).pointee
+        }
+    }
+
 }

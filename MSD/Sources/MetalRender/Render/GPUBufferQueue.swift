@@ -8,14 +8,14 @@
 import Metal
 
 
-// Stores a GPU buffer with 3 entries that can be cycled between, as a property wrapper
+// Stores a GPU buffer with 3 fixed-sized entries (of appropriate size to store T) that can be cycled between, as a property wrapper
 @propertyWrapper
 final class GPUBufferQueue<T> {
     // The 256 byte aligned size of our uniform structure
     let alignedUniformsSize = (MemoryLayout<T>.size + 0xFF) & -0x100
 
+    var bufferIndex = 0
     let maxBuffersInFlight = 3
-
     let inFlightSemaphore: DispatchSemaphore
     
     let dynamicUniformBuffer: MTLBuffer
@@ -24,7 +24,6 @@ final class GPUBufferQueue<T> {
         alignedUniformsSize * bufferIndex
     }
     
-    var bufferIndex = 0
     
     var pointer: UnsafeMutablePointer<T> {
         UnsafeMutableRawPointer(dynamicUniformBuffer.contents() + bufferOffset).bindMemory(to:T.self, capacity:1)
@@ -54,7 +53,7 @@ final class GPUBufferQueue<T> {
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
         inFlightSemaphore = DispatchSemaphore(value: maxBuffersInFlight)
         
-        guard let buffer = device.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared]) else { throw RendererError.metalAllocationError }
+        guard let buffer = device.makeBuffer(length:uniformBufferSize, options: device.uploadBufferOptions) else { throw RendererError.metalAllocationError }
         buffer.label = "GPUBufferQueue<\(T.self)>"
         dynamicUniformBuffer = buffer
     }
