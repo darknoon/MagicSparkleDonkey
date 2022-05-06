@@ -3,8 +3,8 @@ public class Scene {
 
     public init() {
         var root = store.createEntity()
-        root[TransformComponent.self] = .init(.identity)
-        root[EntityChildCollection.self] = []
+        root.transform = .init(.identity)
+        root.children = []
         self.root = root.id
     }
 
@@ -15,6 +15,7 @@ public class Scene {
         get {
             Entity(id: root, componentStorage: store.storage)
         }
+        // Clients that want to set something here don't really want to overwrite this with a copy, they want to access properties off of this.
         _modify {
             var e = Entity(id: root, componentStorage: store.storage)
             yield &e

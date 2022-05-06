@@ -6,14 +6,15 @@
 //
 import simd
 
-public struct MeshComponent : Component {
+public struct MeshComponent: Component {
     public let resource: Resource.ID?
     public init(_ resource: Resource.ID?) {
         self.resource = resource
     }
 }
 
-public class RenderSystem : System {
+/// RenderSystem copies data from the ECS as appropriate to fill in the DisplayList that is passed to the actual renderer. In the future this could be logically extended to support multiple passes etc.
+public class RenderSystem: System {
     public typealias Inputs = (TransformComponent, MeshComponent, PerspectiveCamera)
     public typealias Outputs = (DisplayList)
     
@@ -67,14 +68,9 @@ public class RenderSystem : System {
             }
             
             // get this entity's children (if any)
-            if let children = entity[EntityChildCollection.self] {
-                for childId in children {
-                    // Add children to render list
-                    if let child = scene.store[childId] {
-                        traverse(childrenOf: child)
-                    } else {
-                        print("Referenced nonexistant child \(childId)")
-                    }
+            if let children = entity.childEntities {
+                for child in children {
+                    traverse(childrenOf: child)
                 }
             }
             // restore transform
@@ -85,5 +81,12 @@ public class RenderSystem : System {
         
         let (_, _, viewMatrix) = findActiveCamera(scene: scene)
         scene.rootEntity[DisplayList.self] = DisplayList(displays: displayList, viewMatrix: viewMatrix)
+    }
+}
+
+internal extension Scene {
+    var displayList: RenderSystem.DisplayList? {
+        get { rootEntity[RenderSystem.DisplayList.self] }
+        set { rootEntity[RenderSystem.DisplayList.self] = newValue}
     }
 }

@@ -12,7 +12,7 @@ public struct Entity {
     
     let id: ID
     // Hold a re
-    private unowned let componentStorage: ComponentStore.Storage
+    internal unowned let componentStorage: ComponentStore.Storage
     
     internal init(id: ID, componentStorage: ComponentStore.Storage) {
         self.id = id
@@ -23,6 +23,7 @@ public struct Entity {
         get {
             componentStorage.get(entity: id)
         }
+        // TODO: _read etc would allow us to improve performance by not copying in-out any values
         set {
             if let newValue = newValue {
                 componentStorage.set(id: id, component: newValue)
@@ -31,20 +32,5 @@ public struct Entity {
             }
         }
     }
-
-//    public subscript<T: Component>(_ : T.Type) -> T {
-//        get {
-//            componentStorage.get(entity: id)!
-//        }
-//        // TODO: _read etc would allow us to improve performance by not copying in-out any values
-////        _read {
-////            guard let entry: ComponentCollection<T> = componentStorage.findStorageEntry(componentType: ObjectIdentifier(T.self))
-////            else { throw }
-////            yield entry[id]
-////        }
-//        set {
-//            componentStorage.set(id: id, component: newValue)
-//        }
-//    }
 
 }

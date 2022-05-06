@@ -98,36 +98,36 @@ struct MSDView : PlatformViewRepresentable {
 
 func addDefaultCamera(to scene: MSD.Scene) {
     var camera = scene.store.createEntity()
-    camera[TransformComponent.self] = .init(Transform(translation: .init(x: 0, y: 0, z: -8)))
+    camera.transform = .init(Transform(translation: .init(x: 0, y: 0, z: -8)))
     // Add as child
-    var rootChildren: EntityChildCollection = scene.rootEntity[EntityChildCollection.self] ?? EntityChildCollection()
+    var rootChildren: EntityChildCollection = scene.rootEntity.children ?? EntityChildCollection()
     rootChildren.append(camera)
-    scene.rootEntity[EntityChildCollection.self] = rootChildren
+    scene.rootEntity.children = rootChildren
     
-    // TODO: enable this expression with _read all the way down to store? `scene.rootEntity[EntityChildCollection.self].append(camera)`
+    // TODO: enable this expression with _read all the way down to store? `scene.rootEntity.children.append(camera)`
     
 }
 
 func addDefaultObject(to scene: MSD.Scene) {
     
-    var children = scene.rootEntity[EntityChildCollection.self]!
+    var children = scene.rootEntity.children!
     for x in 1..<10 {
         var rowEntity = scene.store.createEntity()
-        rowEntity[TransformComponent.self] = TransformComponent(.identity)
+        rowEntity.transform = TransformComponent(.identity)
         var subChildren: EntityChildCollection = .init()
         for y in 1..<10 {
             var entity = scene.store.createEntity()
             let t = simd_float4x4(translation: simd_float3(x: Float(x) * 0.2, y: Float(y) * 0.2, z: 0))
-            entity[TransformComponent.self] = TransformComponent(t)
+            entity.transform = TransformComponent(t)
             // Render default mesh
             entity[MeshComponent.self] = MeshComponent(0)
             entity[RotationComponent.self] = RotationComponent(rotation: Float.random(in: 0...1))
             subChildren.append(entity)
         }
-        rowEntity[EntityChildCollection.self] = subChildren
+        rowEntity.children = subChildren
         children.append(rowEntity)
     }
     
-    scene.rootEntity[EntityChildCollection.self] = children
+    scene.rootEntity.children = children
 }
 

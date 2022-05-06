@@ -41,7 +41,7 @@ public struct AnySystem: Updatable {
 public final class SystemStore: Updatable {
     // Whatever existential is necessary to represent systems, ie if System is a PAT
     
-    // Array of existentials for now
+    // Array of custom existentials for now (System has associated type parameters)
     var systems: [AnySystem] = []
     
     public func add<S: System>(system: S) {

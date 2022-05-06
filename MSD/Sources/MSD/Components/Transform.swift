@@ -16,3 +16,11 @@ public struct TransformComponent: Component {
         self.transform = transform
     }
 }
+
+
+public extension Entity {
+    var transform: TransformComponent? {
+        get { self[TransformComponent.self] }
+        set { self[TransformComponent.self] = newValue }
+    }
+}
